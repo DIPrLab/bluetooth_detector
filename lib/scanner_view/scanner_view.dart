@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bluetooth_detector/map_view/map_functions.dart';
 import 'package:bluetooth_detector/map_view/map_view.dart';
@@ -14,6 +13,7 @@ import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report/datum.dart';
 import 'package:bluetooth_detector/settings.dart';
+import 'package:universal_ble/universal_ble.dart';
 import 'package:vibration/vibration.dart';
 import 'package:latlng/latlng.dart';
 
@@ -21,13 +21,15 @@ part 'package:bluetooth_detector/scanner_view/buttons.dart';
 part 'package:bluetooth_detector/scanner_view/scanner.dart';
 
 class ScannerView extends StatefulWidget {
-  const ScannerView({super.key});
+  ScannerView({super.key, this.adapterState = AvailabilityState.unknown});
+  AvailabilityState adapterState;
 
   @override
   ScannerViewState createState() => ScannerViewState();
 }
 
 class ScannerViewState extends State<ScannerView> {
+  bool isScanning = false;
   LatLng? location;
   late StreamSubscription<Position> positionStream;
   Offset? dragStart;
@@ -35,40 +37,30 @@ class ScannerViewState extends State<ScannerView> {
   Report report = Report({});
   bool autoConnect = false;
 
-  bool isScanning = false;
-  late StreamSubscription<bool> isScanningSubscription;
   late StreamSubscription<List<ScanResult>> scanResultsSubscription;
-  List<ScanResult> scanResults = [];
+  List<BleDevice> scanResults = [];
   List<BluetoothDevice> systemDevices = [];
 
   late StreamSubscription<DateTime> timeStreamSubscription;
 
-  final Stream<DateTime> _timeStream =
-      Stream.periodic(Settings.scanTime, (int x) {
+  final Stream<DateTime> _timeStream = Stream.periodic(Settings.scanTime, (int x) {
     return DateTime.now();
   });
 
   void log() {
     List<Device> devices = scanResults
-        .map((e) => Device(
-            e.device.remoteId.toString(),
-            e.advertisementData.advName,
-            e.device.platformName,
-            e.advertisementData.manufacturerData.keys.toList()))
+        .map((d) => Device(d.deviceId, d.name ?? "", d.name ?? "Unimplemented", d.manufacturerData?.toList() ?? []))
         .toList();
     for (Device d in devices) {
       if (report.report[d.id] == null) {
-        report.report[d.id] =
-            Device(d.id, d.name, d.platformName, d.manufacturer);
+        report.report[d.id] = Device(d.id, d.name, d.platformName, d.manufacturer);
       }
-      report.report[d.id]?.dataPoints
-          .add(Datum(location?.latitude.degrees, location?.longitude.degrees));
+      report.report[d.id]?.dataPoints.add(Datum(location?.latitude.degrees, location?.longitude.degrees));
     }
   }
 
   void enableLocationStream() {
-    positionStream = Geolocator.getPositionStream(
-            locationSettings: Controllers.getLocationSettings(30))
+    positionStream = Geolocator.getPositionStream(locationSettings: Controllers.getLocationSettings(30))
         .listen((Position? position) {
       setState(() {
         location = position?.toLatLng();
@@ -95,22 +87,13 @@ class ScannerViewState extends State<ScannerView> {
 
     enableLocationStream();
 
-    scanResultsSubscription = FlutterBluePlus.onScanResults.listen((results) {
-      scanResults = results;
-      probe(results.last.device);
+    UniversalBle.onScanResult = (bleDevice) {
+      scanResults.add(bleDevice);
+      probe(bleDevice);
       if (mounted) {
         setState(() {});
       }
-    }, onError: (e) {
-      // Snackbar.show(ABC.b, prettyException("Scan Error:", e), success: false);
-    });
-
-    isScanningSubscription = FlutterBluePlus.isScanning.listen((state) {
-      isScanning = state;
-      if (mounted) {
-        setState(() {});
-      }
-    });
+    };
 
     timeStreamSubscription = _timeStream.listen((currentTime) {
       if (isScanning) {
