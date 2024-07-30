@@ -6,13 +6,6 @@ void main() {
   runApp(const SettingsView());
 }
 
-void save(scanTime, thresholdTime, scanDistance, thresholdDistance) {
-  double finalScanTime = scanTime;
-  double finalThresholdTime = thresholdTime;
-  double finalScanDistance = scanDistance;
-  double finalThresholdDistance = thresholdDistance;
-}
-
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
@@ -77,6 +70,13 @@ class SettingsViewState extends State<SettingsView> {
     });
   }
 
+  void save() {
+    double finalScanTime = scanTime;
+    double finalThresholdTime = thresholdTime;
+    double finalScanDistance = scanDistance;
+    double finalThresholdDistance = thresholdDistance;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -126,8 +126,7 @@ class SettingsViewState extends State<SettingsView> {
                   } else {
                     thresholdTime = thresholdTime;
                   }
-                  save(
-                      scanTime, thresholdTime, scanDistance, thresholdDistance);
+                  save();
                 });
               },
             ),
@@ -145,8 +144,7 @@ class SettingsViewState extends State<SettingsView> {
                   } else {
                     thresholdTime = newValue;
                   }
-                  save(
-                      scanTime, thresholdTime, scanDistance, thresholdDistance);
+                  save();
                 });
               },
             ),
@@ -175,8 +173,7 @@ class SettingsViewState extends State<SettingsView> {
                   } else {
                     thresholdDistance = thresholdDistance;
                   }
-                  save(
-                      scanTime, thresholdTime, scanDistance, thresholdDistance);
+                  save();
                 });
               },
             ),
@@ -194,8 +191,7 @@ class SettingsViewState extends State<SettingsView> {
                   } else {
                     thresholdDistance = newValue;
                   }
-                  save(
-                      scanTime, thresholdTime, scanDistance, thresholdDistance);
+                  save();
                 });
               },
             ),
