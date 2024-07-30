@@ -21,7 +21,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Blue Crab: Bluetooth detector',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.green,
       ),
       home: const SettingsView(),
     );
@@ -46,10 +46,10 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
       color: colors.background,
       child: ListTile(
         leading: IconButton(
-          icon: Icon(Icons.add),
+          icon: Icon(Icons.add, color: Colors.white),
           onPressed: onAddLocation,
         ),
-        title: Text("Add New Safe Zone"),
+        title: Text("Add New Safe Zone", style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -92,21 +92,29 @@ class SettingsViewState extends State<SettingsView> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Metrics",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Time",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
-            Text('Scanning Time', style: TextStyle(fontSize: 18)),
+            Text('          Scanning Time',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
+              activeColor: Colors.orange,
               min: 0.0,
               max: 100.0,
               value: scanTime,
@@ -123,8 +131,10 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('Scanning Time threshold', style: TextStyle(fontSize: 18)),
+            Text('          Scanning Time threshold',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
+              activeColor: Colors.orange,
               min: 0.0,
               max: 100.0,
               value: thresholdTime,
@@ -141,14 +151,19 @@ class SettingsViewState extends State<SettingsView> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Distance",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
-            Text('Scanning Distance', style: TextStyle(fontSize: 18)),
+            Text('          Scanning Distance',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
+              activeColor: Colors.orange,
               min: 0.0,
               max: 100.0,
               value: scanDistance,
@@ -165,8 +180,10 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('Scanning Distance threshold', style: TextStyle(fontSize: 18)),
+            Text('          Scanning Distance threshold',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
+              activeColor: Colors.orange,
               min: 0.0,
               max: 100.0,
               value: thresholdDistance,
@@ -190,15 +207,18 @@ class SettingsViewState extends State<SettingsView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Safe Zones",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      "\nSafe Zones",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   LocationHeader(onAddLocation: _addLocation),
                   ...locations.map((location) => ListTile(
                         title: Text(
-                            'Latitude: ${location.latitude}, Longitude: ${location.longitude}'),
+                            'Latitude: ${location.latitude}, Longitude: ${location.longitude}',
+                            style: TextStyle(color: Colors.white)),
                       )),
                 ]))),
           ],
