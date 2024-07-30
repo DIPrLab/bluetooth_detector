@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
@@ -121,11 +123,7 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   scanTime = newValue;
-                  if (scanTime > thresholdTime) {
-                    thresholdTime = scanTime;
-                  } else {
-                    thresholdTime = thresholdTime;
-                  }
+                  thresholdTime = max(scanTime, thresholdTime);
                   save();
                 });
               },
@@ -139,11 +137,7 @@ class SettingsViewState extends State<SettingsView> {
               value: thresholdTime,
               onChanged: (newValue) {
                 setState(() {
-                  if (newValue < scanTime) {
-                    thresholdTime = scanTime;
-                  } else {
-                    thresholdTime = newValue;
-                  }
+                  thresholdTime = max(scanTime, newValue);
                   save();
                 });
               },
@@ -168,11 +162,7 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   scanDistance = newValue;
-                  if (scanDistance > thresholdDistance) {
-                    thresholdDistance = scanDistance;
-                  } else {
-                    thresholdDistance = thresholdDistance;
-                  }
+                  thresholdDistance = max(scanDistance, thresholdDistance);
                   save();
                 });
               },
@@ -186,11 +176,7 @@ class SettingsViewState extends State<SettingsView> {
               value: thresholdDistance,
               onChanged: (newValue) {
                 setState(() {
-                  if (newValue < scanDistance) {
-                    thresholdDistance = scanDistance;
-                  } else {
-                    thresholdDistance = newValue;
-                  }
+                  thresholdDistance = max(scanDistance, newValue);
                   save();
                 });
               },
