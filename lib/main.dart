@@ -40,8 +40,9 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    Widget screen =
-        _adapterState == BluetoothAdapterState.on ? const ScannerView() : BluetoothOffView(adapterState: _adapterState);
+    Widget screen = _adapterState == BluetoothAdapterState.on
+        ? const ScannerView()
+        : BluetoothOffView(adapterState: _adapterState);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
