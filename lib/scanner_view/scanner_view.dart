@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report/datum.dart';
+import 'package:bluetooth_detector/settings_view/settings_view.dart';
 import 'package:bluetooth_detector/settings.dart';
 import 'package:universal_ble/universal_ble.dart';
 import 'package:vibration/vibration.dart';
@@ -124,10 +125,10 @@ class ScannerViewState extends State<ScannerView> {
               ),
             ]),
             Row(children: [
-              // Padding(
-              //   padding: EdgeInsets.all(16.0),
-              //   child: locationButton(context),
-              // ),
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: settingsButton(),
+              ),
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: scanButton(),

@@ -103,4 +103,18 @@ extension Buttons on ScannerViewState {
       );
     }
   }
+
+  Widget settingsButton() {
+    return FloatingActionButton.large(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SafeArea(child: SettingsView())));
+        setState(() {});
+      },
+      backgroundColor: colors.foreground,
+      child: Icon(Icons.settings, color: colors.primaryText),
+    );
+  }
 }
