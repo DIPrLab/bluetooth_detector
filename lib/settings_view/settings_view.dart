@@ -8,21 +8,6 @@ void main() {
   runApp(const SettingsView());
 }
 
-class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Blue Crab: Bluetooth detector',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const SettingsView(),
-    );
-  }
-}
-
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
