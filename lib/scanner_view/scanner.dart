@@ -9,12 +9,10 @@ extension Scanner on ScannerViewState {
     // android is slow when asking for all advertisements,
     // so instead we only ask for 1/8 of them
     await UniversalBle.startScan();
-    isScanning = true;
   }
 
   Future stopScan() async {
     await UniversalBle.stopScan();
-    isScanning = false;
   }
 
   void rescan() {

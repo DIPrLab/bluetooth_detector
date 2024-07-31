@@ -4,6 +4,7 @@ import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report_view/duration.dart';
 import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:bluetooth_detector/styles/button_styles.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
 
@@ -11,7 +12,9 @@ class DeviceView extends StatelessWidget {
   String deviceID;
   Report report;
   late Device device = report.report[deviceID]!;
-  late Iterable<String> manufacturers = device.manufacturer.map((e) =>
+  late List<int> manufacturer_identifiers =
+      device.manufacturer.toSet().toList().sorted((a, b) => a.compareTo(b));
+  late Iterable<String> manufacturers = manufacturer_identifiers.map((e) =>
       company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
       "Unknown");
 
