@@ -85,12 +85,7 @@ class MapViewState extends State<MapView> {
               onPointerSignal: (event) {
                 if (event is PointerScrollEvent) {
                   transformer.setZoomInPlace(
-                      clamp(
-                          widget.controller!.zoom +
-                              event.scrollDelta.dy / -1000.0,
-                          2,
-                          18),
-                      event.localPosition);
+                      clamp(widget.controller!.zoom + event.scrollDelta.dy / -1000.0, 2, 18), event.localPosition);
                   setState(() {});
                 }
               },
@@ -117,8 +112,7 @@ class MapViewState extends State<MapView> {
                     },
                   ),
                   CustomPaint(
-                    painter: PolylinePainter(transformer, widget.report,
-                        deviceID: widget.deviceID),
+                    painter: PolylinePainter(transformer, widget.report, deviceID: widget.deviceID),
                   ),
                   ...markerWidgets,
                 ],
@@ -158,7 +152,7 @@ class PolylinePainter extends CustomPainter {
     for (int i = 0; i < x.length - 1; i++) {
       DateTime time1 = x[i].time;
       DateTime time2 = x[i + 1].time;
-      if (time2.difference(time1) > Settings.scanTime) continue;
+      if (time2.difference(time1) > Duration(seconds: Settings.shared.scanTime.toInt())) continue;
       Offset p1 = generateOffsetLatLng(x[i].location()!);
       Offset p2 = generateOffsetLatLng(x[i + 1].location()!);
       canvas.drawLine(p1, p2, paint);

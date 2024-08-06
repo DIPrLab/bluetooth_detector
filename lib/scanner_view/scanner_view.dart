@@ -44,32 +44,25 @@ class ScannerViewState extends State<ScannerView> {
 
   late StreamSubscription<DateTime> timeStreamSubscription;
 
-  final Stream<DateTime> _timeStream =
-      Stream.periodic(Settings.scanTime, (int x) {
+  final Stream<DateTime> _timeStream = Stream.periodic(Duration(seconds: Settings.shared.scanTime.toInt()), (int x) {
     return DateTime.now();
   });
 
   void log() {
     List<Device> devices = scanResults
-        .map((e) => Device(
-            e.device.remoteId.toString(),
-            e.advertisementData.advName,
-            e.device.platformName,
+        .map((e) => Device(e.device.remoteId.toString(), e.advertisementData.advName, e.device.platformName,
             e.advertisementData.manufacturerData.keys.toList()))
         .toList();
     for (Device d in devices) {
       if (report.report[d.id] == null) {
-        report.report[d.id] =
-            Device(d.id, d.name, d.platformName, d.manufacturer);
+        report.report[d.id] = Device(d.id, d.name, d.platformName, d.manufacturer);
       }
-      report.report[d.id]?.dataPoints
-          .add(Datum(location?.latitude.degrees, location?.longitude.degrees));
+      report.report[d.id]?.dataPoints.add(Datum(location?.latitude.degrees, location?.longitude.degrees));
     }
   }
 
   void enableLocationStream() {
-    positionStream = Geolocator.getPositionStream(
-            locationSettings: Controllers.getLocationSettings(30))
+    positionStream = Geolocator.getPositionStream(locationSettings: Controllers.getLocationSettings(30))
         .listen((Position? position) {
       setState(() {
         location = position?.toLatLng();
