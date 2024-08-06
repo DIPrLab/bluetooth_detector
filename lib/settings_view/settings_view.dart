@@ -4,6 +4,7 @@ import 'package:bluetooth_detector/styles/button_styles.dart';
 import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const SettingsView());
@@ -58,11 +59,12 @@ class SettingsViewState extends State<SettingsView> {
     });
   }
 
-  void save() {
-    double finalScanTime = scanTime;
-    double finalThresholdTime = thresholdTime;
-    double finalScanDistance = scanDistance;
-    double finalThresholdDistance = thresholdDistance;
+  void save() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble("scanTime", scanTime);
+    await prefs.setDouble("thresholdTime", thresholdTime);
+    await prefs.setDouble("scanDistance", scanTime);
+    await prefs.setDouble("thresholdDistance", thresholdTime);
   }
 
   @override
@@ -88,24 +90,17 @@ class SettingsViewState extends State<SettingsView> {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Metrics",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Time",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            Text('          Scanning Time',
-                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Time', style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
               activeColor: Colors.orange,
               min: 0.0,
@@ -119,8 +114,7 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('          Scanning Time threshold',
-                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Time threshold', style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
               activeColor: Colors.orange,
               min: 0.0,
@@ -137,14 +131,10 @@ class SettingsViewState extends State<SettingsView> {
               padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Distance",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            Text('          Scanning Distance',
-                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Distance', style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
               activeColor: Colors.orange,
               min: 0.0,
@@ -158,8 +148,7 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('          Scanning Distance threshold',
-                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Distance threshold', style: TextStyle(color: Colors.white, fontSize: 18)),
             Slider(
               activeColor: Colors.orange,
               min: 0.0,
@@ -174,26 +163,20 @@ class SettingsViewState extends State<SettingsView> {
             ),
             Flexible(
                 child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "\nSafe Zones",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  LocationHeader(onAddLocation: _addLocation),
-                  ...locations.map((location) => ListTile(
-                        title: Text(
-                            'Latitude: ${location.latitude}, Longitude: ${location.longitude}',
-                            style: TextStyle(color: Colors.white)),
-                      )),
-                ]))),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "\nSafe Zones",
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              LocationHeader(onAddLocation: _addLocation),
+              ...locations.map((location) => ListTile(
+                    title: Text('Latitude: ${location.latitude}, Longitude: ${location.longitude}',
+                        style: TextStyle(color: Colors.white)),
+                  )),
+            ]))),
           ],
         ),
       ),
