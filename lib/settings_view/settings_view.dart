@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const SettingsView());
-}
-
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
