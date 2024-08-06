@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const SettingsView());
-}
-
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
@@ -28,10 +24,10 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
       color: colors.background,
       child: ListTile(
         leading: IconButton(
-          icon: Icon(Icons.add, color: Colors.white),
+          icon: Icon(Icons.add, color: colors.primaryText),
           onPressed: onAddLocation,
         ),
-        title: Text("Add New Safe Zone", style: TextStyle(color: Colors.white)),
+        title: Text("Add New Safe Zone", style: TextStyle(color: colors.primaryText)),
       ),
     );
   }
@@ -90,19 +86,19 @@ class SettingsViewState extends State<SettingsView> {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Metrics",
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Time",
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(color: colors.primaryText, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            Text('Scanning Time', style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
             Slider(
-              activeColor: Colors.orange,
+              activeColor: colors.altText,
               min: 0.0,
               max: 100.0,
               value: scanTime,
@@ -114,9 +110,9 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('Scanning Time threshold', style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
             Slider(
-              activeColor: Colors.orange,
+              activeColor: colors.altText,
               min: 0.0,
               max: 100.0,
               value: thresholdTime,
@@ -131,12 +127,12 @@ class SettingsViewState extends State<SettingsView> {
               padding: const EdgeInsets.all(30.0),
               child: Text(
                 "Distance",
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(color: colors.primaryText, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            Text('Scanning Distance', style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
             Slider(
-              activeColor: Colors.orange,
+              activeColor: colors.altText,
               min: 0.0,
               max: 100.0,
               value: scanDistance,
@@ -148,9 +144,9 @@ class SettingsViewState extends State<SettingsView> {
                 });
               },
             ),
-            Text('Scanning Distance threshold', style: TextStyle(color: Colors.white, fontSize: 18)),
+            Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
             Slider(
-              activeColor: Colors.orange,
+              activeColor: colors.altText,
               min: 0.0,
               max: 100.0,
               value: thresholdDistance,
@@ -168,13 +164,13 @@ class SettingsViewState extends State<SettingsView> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   "\nSafe Zones",
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
               LocationHeader(onAddLocation: _addLocation),
               ...locations.map((location) => ListTile(
                     title: Text('Latitude: ${location.latitude}, Longitude: ${location.longitude}',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: colors.primaryText)),
                   )),
             ]))),
           ],
