@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:bluetooth_detector/map_view/map_functions.dart';
 import 'package:bluetooth_detector/styles/button_styles.dart';
 import 'package:bluetooth_detector/styles/colors.dart';
+import 'package:bluetooth_detector/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,30 +39,30 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class SettingsViewState extends State<SettingsView> {
-  List<LatLng> locations = [
-    LatLng.degree(111.111, 222.222),
-    LatLng.degree(333.333, 444.444),
-    LatLng.degree(555.555, 777.777),
-    LatLng.degree(888.888, 999.999),
-  ];
-
-  double scanTime = 20;
-  double thresholdTime = 20;
-  double scanDistance = 20;
-  double thresholdDistance = 20;
+  double scanTime = Settings.shared.scanTime;
+  double thresholdTime = Settings.shared.thresholdTime;
+  double scanDistance = Settings.shared.scanDistance;
+  double thresholdDistance = Settings.shared.thresholdDistance;
+  Set<LatLng> safeZones = Settings.shared.safeZones.toSet();
 
   void _addLocation() {
-    setState(() {
-      locations.insert(0, LatLng.degree(123.456, 789.012));
+    getLocation().then((location) {
+      setState(() {
+        safeZones.add(location);
+      });
     });
+    save();
   }
 
-  void save() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble("scanTime", scanTime);
-    await prefs.setDouble("thresholdTime", thresholdTime);
-    await prefs.setDouble("scanDistance", scanTime);
-    await prefs.setDouble("thresholdDistance", thresholdTime);
+  void save() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setDouble("scanTime", scanTime);
+      prefs.setDouble("thresholdTime", thresholdTime);
+      prefs.setDouble("scanDistance", scanTime);
+      prefs.setDouble("thresholdDistance", thresholdTime);
+      prefs.setStringList(
+          "safeZones", safeZones.map((z) => z.latitude.toString() + "," + z.longitude.toString()).toList());
+    });
   }
 
   @override
@@ -168,7 +170,7 @@ class SettingsViewState extends State<SettingsView> {
                 ),
               ),
               LocationHeader(onAddLocation: _addLocation),
-              ...locations.map((location) => ListTile(
+              ...safeZones.map((location) => ListTile(
                     title: Text('Latitude: ${location.latitude}, Longitude: ${location.longitude}',
                         style: TextStyle(color: colors.primaryText)),
                   )),
