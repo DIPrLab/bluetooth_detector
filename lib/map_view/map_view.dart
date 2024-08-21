@@ -5,7 +5,6 @@ import 'package:bluetooth_detector/map_view/build_marker_widget.dart';
 import 'package:bluetooth_detector/map_view/tile_servers.dart';
 import 'package:bluetooth_detector/report/datum.dart';
 import 'package:bluetooth_detector/report/report.dart';
-import 'package:bluetooth_detector/settings.dart';
 import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 part 'package:bluetooth_detector/map_view/map_view_controllers.dart';
 
@@ -27,9 +27,11 @@ class MapView extends StatefulWidget {
   Report report;
   MapController? controller;
   String? deviceID;
+  Settings settings;
 
   MapView(
-    this.report, {
+    this.report,
+    this.settings, {
     super.key,
     this.controller,
     this.deviceID,
@@ -112,7 +114,7 @@ class MapViewState extends State<MapView> {
                     },
                   ),
                   CustomPaint(
-                    painter: PolylinePainter(transformer, widget.report, deviceID: widget.deviceID),
+                    painter: PolylinePainter(transformer, widget.report, widget.settings, deviceID: widget.deviceID),
                   ),
                   ...markerWidgets,
                 ],
@@ -126,8 +128,9 @@ class MapViewState extends State<MapView> {
 }
 
 class PolylinePainter extends CustomPainter {
-  PolylinePainter(this.transformer, this.report, {this.deviceID});
+  PolylinePainter(this.transformer, this.report, this.settings, {this.deviceID});
 
+  Settings settings;
   Report report;
   String? deviceID;
   final MapTransformer transformer;
@@ -152,7 +155,7 @@ class PolylinePainter extends CustomPainter {
     for (int i = 0; i < x.length - 1; i++) {
       DateTime time1 = x[i].time;
       DateTime time2 = x[i + 1].time;
-      if (time2.difference(time1) > Duration(seconds: Settings.shared.scanTime.toInt())) continue;
+      if (time2.difference(time1) > Duration(seconds: settings.scanTime.toInt())) continue;
       Offset p1 = generateOffsetLatLng(x[i].location()!);
       Offset p2 = generateOffsetLatLng(x[i + 1].location()!);
       canvas.drawLine(p1, p2, paint);

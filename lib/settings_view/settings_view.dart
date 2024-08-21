@@ -8,13 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
-
-  @override
-  SettingsViewState createState() => SettingsViewState();
-}
-
 class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onAddLocation;
 
@@ -22,7 +15,8 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Center(
+        child: Container(
       color: colors.background,
       child: ListTile(
         leading: IconButton(
@@ -31,24 +25,27 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
         title: Text("Add New Safe Zone", style: TextStyle(color: colors.primaryText)),
       ),
-    );
+    ));
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class SettingsViewState extends State<SettingsView> {
-  double scanTime = Settings.shared.scanTime;
-  double thresholdTime = Settings.shared.thresholdTime;
-  double scanDistance = Settings.shared.scanDistance;
-  double thresholdDistance = Settings.shared.thresholdDistance;
-  Set<LatLng> safeZones = Settings.shared.safeZones.toSet();
+class SettingsView extends StatefulWidget {
+  SettingsView(Settings this.settings, {super.key});
 
+  Settings settings;
+
+  @override
+  SettingsViewState createState() => SettingsViewState();
+}
+
+class SettingsViewState extends State<SettingsView> {
   void _addLocation() {
     getLocation().then((location) {
       setState(() {
-        safeZones.add(location);
+        widget.settings.safeZones.add(location);
       });
     });
     save();
@@ -56,12 +53,12 @@ class SettingsViewState extends State<SettingsView> {
 
   void save() {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setDouble("scanTime", scanTime);
-      prefs.setDouble("thresholdTime", thresholdTime);
-      prefs.setDouble("scanDistance", scanTime);
-      prefs.setDouble("thresholdDistance", thresholdTime);
-      prefs.setStringList(
-          "safeZones", safeZones.map((z) => z.latitude.toString() + "," + z.longitude.toString()).toList());
+      prefs.setDouble("scanTime", widget.settings.scanTime);
+      prefs.setDouble("thresholdTime", widget.settings.thresholdTime);
+      prefs.setDouble("scanDistance", widget.settings.scanTime);
+      prefs.setDouble("thresholdDistance", widget.settings.thresholdTime);
+      prefs.setStringList("safeZones",
+          widget.settings.safeZones.map((z) => z.latitude.toString() + "," + z.longitude.toString()).toList());
     });
   }
 
@@ -73,111 +70,110 @@ class SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colors.background,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BackButton(
-              color: colors.primaryText,
-              onPressed: () => Navigator.pop(context),
-              style: AppButtonStyle.buttonWithoutBackground,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "Metrics",
-                style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Text(
-                "Time",
-                style: TextStyle(color: colors.primaryText, fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
-            Slider(
-              activeColor: colors.altText,
-              min: 0.0,
-              max: 100.0,
-              value: scanTime,
-              onChanged: (newValue) {
-                setState(() {
-                  scanTime = newValue;
-                  thresholdTime = max(scanTime, thresholdTime);
-                  save();
-                });
-              },
-            ),
-            Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
-            Slider(
-              activeColor: colors.altText,
-              min: 0.0,
-              max: 100.0,
-              value: thresholdTime,
-              onChanged: (newValue) {
-                setState(() {
-                  thresholdTime = max(scanTime, newValue);
-                  save();
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Text(
-                "Distance",
-                style: TextStyle(color: colors.primaryText, fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
-            Slider(
-              activeColor: colors.altText,
-              min: 0.0,
-              max: 100.0,
-              value: scanDistance,
-              onChanged: (newValue) {
-                setState(() {
-                  scanDistance = newValue;
-                  thresholdDistance = max(scanDistance, thresholdDistance);
-                  save();
-                });
-              },
-            ),
-            Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
-            Slider(
-              activeColor: colors.altText,
-              min: 0.0,
-              max: 100.0,
-              value: thresholdDistance,
-              onChanged: (newValue) {
-                setState(() {
-                  thresholdDistance = max(scanDistance, newValue);
-                  save();
-                });
-              },
-            ),
-            Flexible(
-                child: SingleChildScrollView(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "\nSafe Zones",
+        backgroundColor: colors.background,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BackButton(
+                  color: colors.primaryText,
+                  onPressed: () => Navigator.pop(context),
+                  style: AppButtonStyle.buttonWithoutBackground,
+                ),
+                Text(
+                  "Metrics",
                   style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
-              LocationHeader(onAddLocation: _addLocation),
-              ...safeZones.map((location) => ListTile(
-                    title: Text('Latitude: ${location.latitude}, Longitude: ${location.longitude}',
-                        style: TextStyle(color: colors.primaryText)),
-                  )),
-            ]))),
-          ],
-        ),
-      ),
-    );
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+                  child: Text(
+                    "Time",
+                    style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Slider(
+                  activeColor: colors.altText,
+                  min: 0.0,
+                  max: 100.0,
+                  value: widget.settings.scanTime,
+                  onChanged: (newValue) {
+                    setState(() {
+                      widget.settings.scanTime = newValue;
+                      widget.settings.thresholdTime = max(widget.settings.scanTime, widget.settings.thresholdTime);
+                      save();
+                    });
+                  },
+                ),
+                Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Slider(
+                  activeColor: colors.altText,
+                  min: 0.0,
+                  max: 100.0,
+                  value: widget.settings.thresholdTime,
+                  onChanged: (newValue) {
+                    setState(() {
+                      widget.settings.thresholdTime = max(widget.settings.scanTime, newValue);
+                      save();
+                    });
+                  },
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Text(
+                      "Distance",
+                      style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
+                    )),
+                Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Slider(
+                  activeColor: colors.altText,
+                  min: 0.0,
+                  max: 100.0,
+                  value: widget.settings.scanDistance,
+                  onChanged: (newValue) {
+                    setState(() {
+                      widget.settings.scanDistance = newValue;
+                      widget.settings.thresholdDistance =
+                          max(widget.settings.scanDistance, widget.settings.thresholdDistance);
+                      save();
+                    });
+                  },
+                ),
+                Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Slider(
+                  activeColor: colors.altText,
+                  min: 0.0,
+                  max: 100.0,
+                  value: widget.settings.thresholdDistance,
+                  onChanged: (newValue) {
+                    setState(() {
+                      widget.settings.thresholdDistance = max(widget.settings.scanDistance, newValue);
+                      save();
+                    });
+                  },
+                ),
+                Flexible(
+                    child: SingleChildScrollView(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Text(
+                      "Safe Zones",
+                      style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  LocationHeader(onAddLocation: _addLocation),
+                  ...widget.settings.safeZones.map((location) => ListTile(
+                        title: Text('Latitude: ${location.latitude.degrees}, Longitude: ${location.longitude.degrees}',
+                            style: TextStyle(color: colors.primaryText)),
+                      )),
+                ]))),
+              ],
+            ),
+          ),
+        ));
   }
 }

@@ -5,6 +5,11 @@ class TextStyles {
   static var normal = const TextStyle(
     color: colors.primaryText,
   );
+  static var splashText = const TextStyle(
+    color: colors.primaryText,
+    fontSize: 128.0,
+    fontWeight: FontWeight.bold,
+  );
   static var title = const TextStyle(
     color: colors.primaryText,
     fontSize: 32.0,

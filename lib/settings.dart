@@ -8,9 +8,7 @@ class Settings {
   late double thresholdDistance;
   late List<LatLng> safeZones;
 
-  static Settings shared = Settings();
-
-  Settings() {
+  loadData() async {
     SharedPreferences.getInstance().then((prefs) {
       scanTime = prefs.getDouble("scanTime") ?? 10;
       thresholdTime = prefs.getDouble("thresholdTime") ?? 10;

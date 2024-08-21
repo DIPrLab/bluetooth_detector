@@ -5,10 +5,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report_view/device_view.dart';
 import 'package:bluetooth_detector/report/report.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 class ReportView extends StatefulWidget {
+  ReportView(Settings this.settings, {super.key, required this.report});
+
   final Report report;
-  ReportView({super.key, required this.report});
+  final Settings settings;
 
   @override
   ReportViewState createState() => ReportViewState();
@@ -35,9 +38,7 @@ class ReportViewState extends State<ReportView> {
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.all(4),
-                          child: Text("Report",
-                              textAlign: TextAlign.center,
-                              style: TextStyles.title),
+                          child: Text("Report", textAlign: TextAlign.center, style: TextStyles.title),
                         ),
                         const Spacer(),
                       ],
@@ -54,11 +55,9 @@ class ReportViewState extends State<ReportView> {
                       .sorted((a, b) => widget.report.report[a]!
                           .locations()
                           .length
-                          .compareTo(
-                              widget.report.report[b]!.locations().length))
+                          .compareTo(widget.report.report[b]!.locations().length))
                       .reversed
-                      .map((e) =>
-                          DeviceView(deviceID: e, report: widget.report)),
+                      .map((e) => DeviceView(widget.settings, deviceID: e, report: widget.report)),
                 ],
               ),
             ],

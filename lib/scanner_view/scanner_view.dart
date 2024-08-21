@@ -22,7 +22,10 @@ part 'package:bluetooth_detector/scanner_view/buttons.dart';
 part 'package:bluetooth_detector/scanner_view/scanner.dart';
 
 class ScannerView extends StatefulWidget {
-  const ScannerView({super.key});
+  ScannerView(Report this.report, Settings this.settings, {super.key});
+
+  Report report;
+  Settings settings;
 
   @override
   ScannerViewState createState() => ScannerViewState();
@@ -33,7 +36,6 @@ class ScannerViewState extends State<ScannerView> {
   late StreamSubscription<Position> positionStream;
   Offset? dragStart;
   double scaleStart = 1.0;
-  Report report = Report({});
   bool autoConnect = false;
 
   bool isScanning = false;
@@ -44,9 +46,7 @@ class ScannerViewState extends State<ScannerView> {
 
   late StreamSubscription<DateTime> timeStreamSubscription;
 
-  final Stream<DateTime> _timeStream = Stream.periodic(Duration(seconds: Settings.shared.scanTime.toInt()), (int x) {
-    return DateTime.now();
-  });
+  late Stream<DateTime> _timeStream;
 
   void log() {
     List<Device> devices = scanResults
@@ -54,10 +54,10 @@ class ScannerViewState extends State<ScannerView> {
             e.advertisementData.manufacturerData.keys.toList()))
         .toList();
     for (Device d in devices) {
-      if (report.report[d.id] == null) {
-        report.report[d.id] = Device(d.id, d.name, d.platformName, d.manufacturer);
+      if (widget.report.report[d.id] == null) {
+        widget.report.report[d.id] = Device(d.id, d.name, d.platformName, d.manufacturer);
       }
-      report.report[d.id]?.dataPoints.add(Datum(location?.latitude.degrees, location?.longitude.degrees));
+      widget.report.report[d.id]?.dataPoints.add(Datum(location?.latitude.degrees, location?.longitude.degrees));
     }
   }
 
@@ -83,10 +83,6 @@ class ScannerViewState extends State<ScannerView> {
   void initState() {
     super.initState();
 
-    read().then((savedReport) {
-      report = savedReport;
-    });
-
     enableLocationStream();
 
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen((results) {
@@ -104,6 +100,10 @@ class ScannerViewState extends State<ScannerView> {
       if (mounted) {
         setState(() {});
       }
+    });
+
+    _timeStream = Stream.periodic(Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
+      return DateTime.now();
     });
 
     timeStreamSubscription = _timeStream.listen((currentTime) {

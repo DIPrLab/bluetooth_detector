@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 Future<File> get _localFile async {
   final Directory directory = await getApplicationDocumentsDirectory();
@@ -20,7 +21,7 @@ void write(Report report) async {
   print("Saved!");
 }
 
-Future<Report> read() async {
+Future<Report> readReport() async {
   try {
     return await _localFile.then((file) {
       return file.readAsString().then((fileData) {
@@ -30,4 +31,10 @@ Future<Report> read() async {
   } catch (e) {
     return Report({});
   }
+}
+
+Future<Settings> readSettings() async {
+  Settings settings = Settings();
+  settings.loadData();
+  return settings;
 }
