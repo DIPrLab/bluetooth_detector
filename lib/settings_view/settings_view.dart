@@ -46,9 +46,9 @@ class SettingsViewState extends State<SettingsView> {
     getLocation().then((location) {
       setState(() {
         widget.settings.safeZones.add(location);
+        save();
       });
     });
-    save();
   }
 
   void save() {
@@ -57,8 +57,11 @@ class SettingsViewState extends State<SettingsView> {
       prefs.setDouble("thresholdTime", widget.settings.thresholdTime);
       prefs.setDouble("scanDistance", widget.settings.scanTime);
       prefs.setDouble("thresholdDistance", widget.settings.thresholdTime);
-      prefs.setStringList("safeZones",
-          widget.settings.safeZones.map((z) => z.latitude.toString() + "," + z.longitude.toString()).toList());
+      prefs.setStringList(
+          "safeZones",
+          widget.settings.safeZones
+              .map((z) => z.latitude.degrees.toString() + "," + z.longitude.degrees.toString())
+              .toList());
     });
   }
 
@@ -94,7 +97,12 @@ class SettingsViewState extends State<SettingsView> {
                     style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Row(children: [
+                  Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                  Spacer(),
+                  Text(widget.settings.scanTime.toStringAsFixed(2),
+                      style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                ]),
                 Slider(
                   activeColor: colors.altText,
                   min: 0.0,
@@ -108,7 +116,12 @@ class SettingsViewState extends State<SettingsView> {
                     });
                   },
                 ),
-                Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Row(children: [
+                  Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                  Spacer(),
+                  Text(widget.settings.thresholdTime.toStringAsFixed(2),
+                      style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                ]),
                 Slider(
                   activeColor: colors.altText,
                   min: 0.0,
@@ -127,7 +140,12 @@ class SettingsViewState extends State<SettingsView> {
                       "Distance",
                       style: TextStyle(color: colors.primaryText, fontSize: 24, fontWeight: FontWeight.bold),
                     )),
-                Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Row(children: [
+                  Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                  Spacer(),
+                  Text(widget.settings.scanDistance.toStringAsFixed(2),
+                      style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                ]),
                 Slider(
                   activeColor: colors.altText,
                   min: 0.0,
@@ -142,7 +160,12 @@ class SettingsViewState extends State<SettingsView> {
                     });
                   },
                 ),
-                Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                Row(children: [
+                  Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                  Spacer(),
+                  Text(widget.settings.thresholdDistance.toStringAsFixed(2),
+                      style: TextStyle(color: colors.primaryText, fontSize: 18)),
+                ]),
                 Slider(
                   activeColor: colors.altText,
                   min: 0.0,

@@ -14,7 +14,11 @@ class Settings {
       thresholdTime = prefs.getDouble("thresholdTime") ?? 10;
       scanDistance = prefs.getDouble("scanDistance") ?? 10;
       thresholdDistance = prefs.getDouble("thresholdDistance") ?? 10;
-      safeZones = prefs.getStringList("safeZones")?.map((x) => LatLng.degree(0, 0)).toList() ?? [];
+      safeZones = prefs.getStringList("safeZones")?.map((x) {
+            List<String> latlng = x.split(',');
+            return LatLng.degree(double.tryParse(latlng[0]) ?? 0.0, double.tryParse(latlng[1]) ?? 0.0);
+          }).toList() ??
+          [];
     });
   }
 }
