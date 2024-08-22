@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:bluetooth_detector/map_view/map_functions.dart';
 import 'package:bluetooth_detector/styles/button_styles.dart';
 import 'package:bluetooth_detector/styles/colors.dart';
+import 'package:bluetooth_detector/settings_view/LatLngTile.dart';
 import 'package:bluetooth_detector/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -166,10 +166,9 @@ class SettingsViewState extends State<SettingsView> {
                     ),
                   ),
                   LocationHeader(onAddLocation: _addLocation),
-                  ...widget.settings.safeZones.map((location) => ListTile(
-                        title: Text('Latitude: ${location.latitude.degrees}, Longitude: ${location.longitude.degrees}',
-                            style: TextStyle(color: colors.primaryText)),
-                      )),
+                  ...widget.settings.safeZones.map(
+                    (location) => LatLngTile(location),
+                  ),
                 ]))),
               ],
             ),
