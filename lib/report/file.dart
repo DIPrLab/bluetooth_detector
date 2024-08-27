@@ -18,17 +18,20 @@ void write(Report report) async {
   await file.writeAsString('${data}');
   print(data);
 
-  print("Saved!");
+  printSuccess("Saved!");
 }
 
 Future<Report> readReport() async {
   try {
     return await _localFile.then((file) {
       return file.readAsString().then((fileData) {
-        return Report.fromJson(jsonDecode(fileData));
+        Report report = Report.fromJson(jsonDecode(fileData));
+        printSuccess("Loaded report");
+        return report;
       });
     });
   } catch (e) {
+    printWarning("Failed to load report");
     return Report({});
   }
 }
@@ -37,4 +40,16 @@ Future<Settings> readSettings() async {
   Settings settings = Settings();
   settings.loadData();
   return settings;
+}
+
+void printSuccess(String text) {
+  print('\x1B[32m$text\x1B[0m');
+}
+
+void printWarning(String text) {
+  print('\x1B[33m$text\x1B[0m');
+}
+
+void printError(String text) {
+  print('\x1B[31m$text\x1B[0m');
 }

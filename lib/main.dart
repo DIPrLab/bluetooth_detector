@@ -73,7 +73,6 @@ class _SplashScreen extends State<SplashScreen> {
     });
     await readReport().then((savedReport) {
       widget.report = savedReport;
-      print('Data loaded');
     });
     // await Future.delayed(Duration(seconds: 3), () {
     // print('Data loaded');
