@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report/file.dart';
 import 'package:bluetooth_detector/settings.dart';
+import 'package:in_app_notification/in_app_notification.dart';
 
 void main() {
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
@@ -74,9 +75,7 @@ class _SplashScreen extends State<SplashScreen> {
     await readReport().then((savedReport) {
       widget.report = savedReport;
     });
-    // await Future.delayed(Duration(seconds: 3), () {
-    // print('Data loaded');
-    // });
+    await Future.delayed(Duration(seconds: 3), () {});
 
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => SafeArea(child: HomePage(widget.report, widget.settings))));
@@ -92,12 +91,12 @@ class _SplashScreen extends State<SplashScreen> {
             Text(
               "BL(u)E CRAB",
               selectionColor: colors.primaryText,
-              style: GoogleFonts.nothingYouCouldDo(
-                // style: GoogleFonts.sniglet(
-                // style: GoogleFonts.caprasimo(
-                // style: GoogleFonts.irishGrover(
-                // style: GoogleFonts.mogra(
-                textStyle: TextStyles.title,
+              // style: GoogleFonts.nothingYouCouldDo(
+              // style: GoogleFonts.sniglet(
+              // style: GoogleFonts.caprasimo(
+              // style: GoogleFonts.mogra(
+              style: GoogleFonts.irishGrover(
+                textStyle: TextStyles.splashText,
               ),
             ),
             Spacer(),
@@ -144,10 +143,11 @@ class _HomePage extends State<HomePage> {
         ? ScannerView(widget.report, widget.settings)
         : BluetoothOffView(adapterState: _adapterState);
 
-    return MaterialApp(
+    return InAppNotification(
+        child: MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(child: screen),
       theme: ThemeData(),
-    );
+    ));
   }
 }
