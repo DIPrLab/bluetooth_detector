@@ -7,7 +7,7 @@ class TextStyles {
   );
   static var splashText = const TextStyle(
     color: colors.primaryText,
-    fontSize: 128.0,
+    fontSize: 64.0,
     fontWeight: FontWeight.bold,
   );
   static var title = const TextStyle(
