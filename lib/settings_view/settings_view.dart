@@ -100,7 +100,7 @@ class SettingsViewState extends State<SettingsView> {
                 Row(children: [
                   Text('Scanning Time', style: TextStyle(color: colors.primaryText, fontSize: 18)),
                   Spacer(),
-                  Text(widget.settings.scanTime.toStringAsFixed(2),
+                  Text(widget.settings.scanTime.toInt().toString() + " seconds",
                       style: TextStyle(color: colors.primaryText, fontSize: 18)),
                 ]),
                 Slider(
@@ -119,7 +119,7 @@ class SettingsViewState extends State<SettingsView> {
                 Row(children: [
                   Text('Scanning Time threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
                   Spacer(),
-                  Text(widget.settings.thresholdTime.toStringAsFixed(2),
+                  Text(widget.settings.thresholdTime.toInt().toString() + " seconds",
                       style: TextStyle(color: colors.primaryText, fontSize: 18)),
                 ]),
                 Slider(
@@ -129,7 +129,8 @@ class SettingsViewState extends State<SettingsView> {
                   value: widget.settings.thresholdTime,
                   onChanged: (newValue) {
                     setState(() {
-                      widget.settings.thresholdTime = max(widget.settings.scanTime, newValue);
+                      widget.settings.thresholdTime = newValue;
+                      widget.settings.scanTime = min(widget.settings.scanTime, newValue);
                       save();
                     });
                   },
@@ -143,7 +144,7 @@ class SettingsViewState extends State<SettingsView> {
                 Row(children: [
                   Text('Scanning Distance', style: TextStyle(color: colors.primaryText, fontSize: 18)),
                   Spacer(),
-                  Text(widget.settings.scanDistance.toStringAsFixed(2),
+                  Text(widget.settings.scanDistance.toInt().toString() + " meters",
                       style: TextStyle(color: colors.primaryText, fontSize: 18)),
                 ]),
                 Slider(
@@ -163,7 +164,7 @@ class SettingsViewState extends State<SettingsView> {
                 Row(children: [
                   Text('Scanning Distance threshold', style: TextStyle(color: colors.primaryText, fontSize: 18)),
                   Spacer(),
-                  Text(widget.settings.thresholdDistance.toStringAsFixed(2),
+                  Text(widget.settings.thresholdDistance.toInt().toString() + " meters",
                       style: TextStyle(color: colors.primaryText, fontSize: 18)),
                 ]),
                 Slider(
@@ -173,7 +174,8 @@ class SettingsViewState extends State<SettingsView> {
                   value: widget.settings.thresholdDistance,
                   onChanged: (newValue) {
                     setState(() {
-                      widget.settings.thresholdDistance = max(widget.settings.scanDistance, newValue);
+                      widget.settings.thresholdDistance = newValue;
+                      widget.settings.scanDistance = min(widget.settings.scanDistance, newValue);
                       save();
                     });
                   },
