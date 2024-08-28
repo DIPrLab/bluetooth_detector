@@ -66,6 +66,7 @@ class DeviceView extends StatelessWidget {
               DataRow("Name", device.name),
               DataRow("Platform", device.platformName),
               DataRow("Manufacturer", manufacturers.join(", ")),
+              DataRow("Risk Score", report.riskScore(device, settings).toString()),
               Table(columnWidths: const {
                 0: FlexColumnWidth(1.0),
                 1: FlexColumnWidth(1.0),

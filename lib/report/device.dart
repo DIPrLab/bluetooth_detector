@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlng/latlng.dart';
-import 'package:bluetooth_detector/settings.dart';
 import 'package:bluetooth_detector/report/datum.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:json_annotation/json_annotation.dart';
