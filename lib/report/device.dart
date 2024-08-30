@@ -33,14 +33,14 @@ class Device {
     return locations;
   }
 
-  int incidence(int scanTime) {
+  int incidence(int thresholdTime) {
     int result = 0;
     List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
     while (dataPoints.length > 1) {
       DateTime a = dataPoints.elementAt(0).time;
       DateTime b = dataPoints.elementAt(1).time;
       Duration c = b.difference(a);
-      result += c > (Duration(seconds: scanTime) * 2) ? 1 : 0;
+      result += c > (Duration(seconds: thresholdTime) * 2) ? 1 : 0;
       dataPoints.removeAt(0);
     }
     return result;
@@ -77,7 +77,7 @@ class Device {
     return result;
   }
 
-  Duration timeTravelled(int scanTime) {
+  Duration timeTravelled(int thresholdTime) {
     Duration result = Duration();
     List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
 
@@ -85,7 +85,7 @@ class Device {
       DateTime time1 = dataPoints[i].time;
       DateTime time2 = dataPoints[i + 1].time;
       Duration time = time2.difference(time1);
-      if (time < Duration(seconds: scanTime)) {
+      if (time < Duration(seconds: thresholdTime)) {
         result += time;
       }
     }
