@@ -3,7 +3,7 @@ part of 'report.dart';
 extension Statistics on Report {
   num riskScore(Device device, Settings settings) {
     return [
-      (device.timeTravelled(settings.thresholdTime.toInt()).inSeconds, this.incidence(settings)),
+      (device.timeTravelled(settings.thresholdTime.toInt()).inSeconds, this.timeTravelled(settings)),
       (device.incidence(settings.thresholdTime.toInt()), this.incidence(settings)),
       (device.areas(settings.thresholdDistance).length, this.areas(settings)),
     ].map((metric) => max(0, zScore(metric.$1, metric.$2))).reduce((a, b) => a + b);
