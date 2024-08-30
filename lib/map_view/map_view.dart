@@ -155,7 +155,7 @@ class PolylinePainter extends CustomPainter {
     for (int i = 0; i < x.length - 1; i++) {
       DateTime time1 = x[i].time;
       DateTime time2 = x[i + 1].time;
-      if (time2.difference(time1) > Duration(seconds: settings.scanTime.toInt())) continue;
+      if (time2.difference(time1) > Duration(seconds: settings.thresholdTime.toInt())) continue;
       Offset p1 = generateOffsetLatLng(x[i].location()!);
       Offset p2 = generateOffsetLatLng(x[i + 1].location()!);
       canvas.drawLine(p1, p2, paint);
