@@ -2,11 +2,15 @@ part of 'report.dart';
 
 extension Statistics on Report {
   num riskScore(Device device, Settings settings) {
-    return [
+    Iterable<num> data = [
       (device.timeTravelled(settings.thresholdTime.toInt()).inSeconds, this.timeTravelled(settings)),
       (device.incidence(settings.thresholdTime.toInt()), this.incidence(settings)),
       (device.areas(settings.thresholdDistance).length, this.areas(settings)),
-    ].map((metric) => max(0, zScore(metric.$1, metric.$2))).reduce((a, b) => a + b);
+      (device.distanceTravelled(settings.thresholdTime.toInt()), this.distanceTravelled(settings)),
+    ].map((metric) => max(0, zScore(metric.$1, metric.$2)));
+    num avgResult = Stats.fromData(data).average;
+    num addResult = data.reduce((a, b) => a + b);
+    return avgResult;
   }
 
   double zScore(num x, Iterable<num> collection) {
@@ -35,6 +39,12 @@ extension Statistics on Report {
     return report.entries
         .map((device) => device.value?.timeTravelled(settings.thresholdTime.toInt()) ?? Duration(seconds: 0))
         .map((duration) => duration.inSeconds)
+        .toList();
+  }
+
+  List<double> distanceTravelled(Settings settings) {
+    return report.entries
+        .map((device) => device.value?.distanceTravelled(settings.thresholdTime.toInt()) ?? 0)
         .toList();
   }
 }
