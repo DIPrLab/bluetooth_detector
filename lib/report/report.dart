@@ -9,6 +9,14 @@ part 'report.g.dart';
 part 'report_stats.dart';
 
 typedef Area = Set<LatLng>;
+typedef Path = List<PathComponent>;
+
+class PathComponent {
+  DateTime time;
+  LatLng location;
+
+  PathComponent(this.time, this.location);
+}
 
 @JsonSerializable()
 class Report {

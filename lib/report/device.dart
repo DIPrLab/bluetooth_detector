@@ -24,12 +24,12 @@ class Device {
 
   Set<LatLng> locations() {
     Set<LatLng> locations = {};
-    for (Datum dataPoint in this.dataPoints) {
+    this.dataPoints.forEach((dataPoint) {
       LatLng? location = dataPoint.location();
       if (location != null) {
         locations.add(location);
       }
-    }
+    });
     return locations;
   }
 
@@ -88,6 +88,49 @@ class Device {
       }
     }
 
+    return result;
+  }
+
+  List<Path> paths(int thresholdTime) {
+    List<Path> paths = <Path>[];
+    List<PathComponent> dataPoints = this.dataPoints.where((dataPoint) => dataPoint.location() != null).map((datum) {
+      LatLng location = LatLng.degree(datum.location()!.latitude.degrees, datum.location()!.longitude.degrees);
+      return PathComponent(datum.time, location);
+    }).sorted((a, b) => a.time.compareTo(b.time));
+
+    while (!dataPoints.isEmpty) {
+      PathComponent curr = dataPoints.first;
+      dataPoints.removeAt(0);
+      if (paths.isEmpty) {
+        paths.add([curr]);
+      } else {
+        DateTime time1 = paths.last.last.time;
+        DateTime time2 = curr.time;
+        Duration time = time2.difference(time1);
+        if (time < Duration(seconds: thresholdTime)) {
+          paths.last.add(curr);
+        } else {
+          paths.add([curr]);
+        }
+      }
+    }
+
+    return paths;
+  }
+
+  double distanceTravelled(int thresholdTime) {
+    double result = 0.0;
+    paths(thresholdTime).map((path) {
+      double result = 0.0;
+      for (int i = 0; i < path.length - 1; i++) {
+        PathComponent pc1 = path[i];
+        PathComponent pc2 = path[i + 1];
+        double distance = Geolocator.distanceBetween(pc1.location.latitude.degrees, pc1.location.longitude.degrees,
+            pc2.location.latitude.degrees, pc2.location.longitude.degrees);
+        result += distance;
+      }
+      return result;
+    }).reduce((a, b) => a + b);
     return result;
   }
 }
