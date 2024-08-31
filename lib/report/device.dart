@@ -53,6 +53,7 @@ class Device {
         Area a = {};
         a.add(curr);
         result.add(a);
+        result.add({curr});
         continue;
       }
       for (Area area in result) {
