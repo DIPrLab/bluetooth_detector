@@ -50,9 +50,6 @@ class Device {
     Set<Area> result = {};
     for (LatLng curr in locations()) {
       if (result.isEmpty) {
-        Area a = {};
-        a.add(curr);
-        result.add(a);
         result.add({curr});
         continue;
       }
