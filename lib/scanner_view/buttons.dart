@@ -9,7 +9,7 @@ extension Buttons on ScannerViewState {
         setState(() {});
       },
       backgroundColor: colors.foreground,
-      child: Icon(autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled, color: colors.primaryText),
+      child: Icon(autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled, color: colors.iconColor),
     );
   }
 
@@ -23,7 +23,7 @@ extension Buttons on ScannerViewState {
           setState(() {});
         },
         backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_disabled, color: colors.primaryText),
+        child: const Icon(Icons.location_disabled, color: colors.iconColor),
       );
     } else {
       return FloatingActionButton.large(
@@ -34,7 +34,7 @@ extension Buttons on ScannerViewState {
           setState(() {});
         },
         backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_searching, color: colors.primaryText),
+        child: const Icon(Icons.location_searching, color: colors.iconColor),
       );
     }
   }
@@ -55,7 +55,7 @@ extension Buttons on ScannerViewState {
                   builder: (context) => SafeArea(child: ReportView(widget.settings, report: widget.report))));
         },
         backgroundColor: colors.altText,
-        child: const Icon(Icons.stop, color: colors.primaryText),
+        child: const Icon(Icons.stop, color: colors.iconColor),
       );
     } else {
       return FloatingActionButton.large(
@@ -63,7 +63,7 @@ extension Buttons on ScannerViewState {
           startScan();
         },
         backgroundColor: colors.foreground,
-        child: const Icon(Icons.play_arrow_rounded, color: colors.primaryText),
+        child: const Icon(Icons.play_arrow_rounded, color: colors.iconColor),
       );
     }
   }
@@ -76,7 +76,7 @@ extension Buttons on ScannerViewState {
         setState(() {});
       },
       backgroundColor: colors.foreground,
-      child: Icon(Icons.settings, color: colors.primaryText),
+      child: Icon(Icons.settings, color: colors.iconColor),
     );
   }
 }

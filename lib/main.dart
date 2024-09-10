@@ -101,7 +101,7 @@ class _SplashScreen extends State<SplashScreen> {
             ),
             Spacer(),
             SpinKitFadingCircle(
-              color: colors.altText,
+              color: colors.primaryText,
               size: 50.0,
             ),
             Spacer(),
