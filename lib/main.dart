@@ -4,12 +4,12 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:bluetooth_detector/bluetooth_disabled_view/bluetooth_disabled_view.dart';
 import 'package:bluetooth_detector/scanner_view/scanner_view.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:bluetooth_detector/styles/text_styles.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report/file.dart';
 import 'package:bluetooth_detector/settings.dart';
+import 'package:bluetooth_detector/themes.dart';
 import 'package:in_app_notification/in_app_notification.dart';
 
 void main() {
@@ -40,7 +40,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-      theme: ThemeData(),
+      theme: Themes.darkMode,
     );
   }
 }
@@ -84,29 +84,27 @@ class _SplashScreen extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: colors.background,
         body: Center(
-          child: Column(children: [
-            Spacer(),
-            Text(
-              "BL(u)E CRAB",
-              selectionColor: colors.primaryText,
-              // style: GoogleFonts.nothingYouCouldDo(
-              // style: GoogleFonts.sniglet(
-              // style: GoogleFonts.caprasimo(
-              // style: GoogleFonts.mogra(
-              style: GoogleFonts.irishGrover(
-                textStyle: TextStyles.splashText,
-              ),
-            ),
-            Spacer(),
-            SpinKitFadingCircle(
-              color: colors.primaryText,
-              size: 50.0,
-            ),
-            Spacer(),
-          ]),
-        ));
+      child: Column(children: [
+        Spacer(),
+        Text(
+          "BL(u)E CRAB",
+          // style: GoogleFonts.nothingYouCouldDo(
+          // style: GoogleFonts.sniglet(
+          // style: GoogleFonts.caprasimo(
+          // style: GoogleFonts.mogra(
+          style: GoogleFonts.irishGrover(
+            textStyle: TextStyles.splashText,
+          ),
+        ),
+        Spacer(),
+        SpinKitFadingCircle(
+          color: Colors.white,
+          size: 50.0,
+        ),
+        Spacer(),
+      ]),
+    ));
   }
 }
 
@@ -147,7 +145,7 @@ class _HomePage extends State<HomePage> {
         child: MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(child: screen),
-      theme: ThemeData(),
+      theme: Themes.darkMode,
     ));
   }
 }

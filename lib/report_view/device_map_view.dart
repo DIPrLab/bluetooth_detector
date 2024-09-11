@@ -2,7 +2,6 @@ import 'package:bluetooth_detector/map_view/map_functions.dart';
 import 'package:bluetooth_detector/map_view/map_view.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/styles/button_styles.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:map/map.dart';
 import 'package:bluetooth_detector/settings.dart';
@@ -34,7 +33,6 @@ class DeviceMapViewState extends State<DeviceMapView> {
         controller: MapController(location: middlePoint(widget.report.report[widget.device]!.locations().toList())),
       ),
       BackButton(
-        color: colors.primaryText,
         onPressed: () => Navigator.pop(context),
         style: AppButtonStyle.buttonWithBackground,
       ),

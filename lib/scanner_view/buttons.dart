@@ -8,8 +8,9 @@ extension Buttons on ScannerViewState {
         print("Auto Connect: ${autoConnect}");
         setState(() {});
       },
-      backgroundColor: colors.foreground,
-      child: Icon(autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled, color: colors.iconColor),
+      child: Icon(
+        autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled,
+      ),
     );
   }
 
@@ -22,8 +23,9 @@ extension Buttons on ScannerViewState {
           print("Enabling Location Stream");
           setState(() {});
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_disabled, color: colors.iconColor),
+        child: const Icon(
+          Icons.location_disabled,
+        ),
       );
     } else {
       return FloatingActionButton.large(
@@ -33,8 +35,9 @@ extension Buttons on ScannerViewState {
           print("Disabling Location Stream");
           setState(() {});
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_searching, color: colors.iconColor),
+        child: const Icon(
+          Icons.location_searching,
+        ),
       );
     }
   }
@@ -54,16 +57,18 @@ extension Buttons on ScannerViewState {
               MaterialPageRoute(
                   builder: (context) => SafeArea(child: ReportView(widget.settings, report: widget.report))));
         },
-        backgroundColor: colors.altText,
-        child: const Icon(Icons.stop, color: colors.iconColor),
+        child: const Icon(
+          Icons.stop,
+        ),
       );
     } else {
       return FloatingActionButton.large(
         onPressed: () {
           startScan();
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.play_arrow_rounded, color: colors.iconColor),
+        child: const Icon(
+          Icons.play_arrow_rounded,
+        ),
       );
     }
   }
@@ -75,8 +80,9 @@ extension Buttons on ScannerViewState {
             context, MaterialPageRoute(builder: (context) => SafeArea(child: SettingsView(widget.settings))));
         setState(() {});
       },
-      backgroundColor: colors.foreground,
-      child: Icon(Icons.settings, color: colors.iconColor),
+      child: Icon(
+        Icons.settings,
+      ),
     );
   }
 }

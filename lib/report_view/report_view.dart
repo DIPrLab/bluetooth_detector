@@ -1,4 +1,3 @@
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:bluetooth_detector/styles/button_styles.dart';
 import 'package:bluetooth_detector/styles/text_styles.dart';
 import 'package:collection/collection.dart';
@@ -72,13 +71,13 @@ class ReportViewState extends State<ReportView> {
 
   Widget sortButton() {
     return PopupMenuButton<Null>(
-      icon: const Icon(Icons.sort, color: colors.primaryText),
-      color: colors.foreground,
+      icon: const Icon(
+        Icons.sort,
+      ),
       itemBuilder: (BuildContext context) => [
         PopupMenuItem(
           child: ListTile(
             title: Text('Sort By Incidence', style: TextStyles.normal),
-            tileColor: colors.foreground,
           ),
           onTap: (() {
             sortByIncidence();
@@ -87,7 +86,6 @@ class ReportViewState extends State<ReportView> {
         PopupMenuItem(
           child: ListTile(
             title: Text('Sort By Location', style: TextStyles.normal),
-            tileColor: colors.foreground,
           ),
           onTap: (() {
             setState(() {
@@ -98,7 +96,6 @@ class ReportViewState extends State<ReportView> {
         PopupMenuItem(
           child: ListTile(
             title: Text('Sort By Time', style: TextStyles.normal),
-            tileColor: colors.foreground,
           ),
           onTap: (() {
             setState(() {
@@ -113,39 +110,37 @@ class ReportViewState extends State<ReportView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: colors.background,
         body: SingleChildScrollView(
-          child: Column(
+      child: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(4),
+              child: Stack(children: [
+                Row(
+                  children: [
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Text("Report", textAlign: TextAlign.center, style: TextStyles.title),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+                BackButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: AppButtonStyle.buttonWithoutBackground,
+                ),
+                Row(
+                  children: [Spacer(), sortButton()],
+                )
+              ])),
+          Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Stack(children: [
-                    Row(
-                      children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text("Report", textAlign: TextAlign.center, style: TextStyles.title),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                    BackButton(
-                      color: colors.primaryText,
-                      onPressed: () => Navigator.pop(context),
-                      style: AppButtonStyle.buttonWithoutBackground,
-                    ),
-                    Row(
-                      children: [Spacer(), sortButton()],
-                    )
-                  ])),
-              Column(
-                children: [
-                  ...widget.devices.map((e) => DeviceView(widget.settings, deviceID: e, report: widget.report)),
-                ],
-              ),
+              ...widget.devices.map((e) => DeviceView(widget.settings, deviceID: e, report: widget.report)),
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }

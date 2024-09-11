@@ -6,7 +6,6 @@ import 'package:bluetooth_detector/map_view/map_view.dart';
 import 'package:bluetooth_detector/map_view/position.dart';
 import 'package:bluetooth_detector/report/file.dart';
 import 'package:bluetooth_detector/report_view/report_view.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:geolocator/geolocator.dart';
@@ -117,7 +116,6 @@ class ScannerViewState extends State<ScannerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colors.background,
       body: Center(
           child: Row(children: [
         Spacer(),

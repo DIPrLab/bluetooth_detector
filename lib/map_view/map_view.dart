@@ -5,7 +5,6 @@ import 'package:bluetooth_detector/map_view/build_marker_widget.dart';
 import 'package:bluetooth_detector/map_view/tile_servers.dart';
 import 'package:bluetooth_detector/report/datum.dart';
 import 'package:bluetooth_detector/report/report.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
@@ -151,7 +150,6 @@ class PolylinePainter extends CustomPainter {
       return x.time.compareTo(y.time);
     });
 
-    paint.color = colors.altText;
     for (int i = 0; i < x.length - 1; i++) {
       DateTime time1 = x[i].time;
       DateTime time2 = x[i + 1].time;
