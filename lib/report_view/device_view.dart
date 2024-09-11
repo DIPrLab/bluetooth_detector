@@ -62,10 +62,6 @@ class DeviceView extends StatelessWidget {
             },
             style: AppButtonStyle.buttonWithBackground,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              DataRow("", device.id.toString()),
-              DataRow("Name", device.name),
-              DataRow("Platform", device.platformName),
-              DataRow("Manufacturer", manufacturers.join(", ")),
               DataRow("Risk Score", report.riskScore(device, settings).toString()),
               Table(columnWidths: const {
                 0: FlexColumnWidth(1.0),
@@ -78,6 +74,59 @@ class DeviceView extends StatelessWidget {
                   Tile("Duration", device.timeTravelled(settings.scanTime.toInt()).printFriendly()),
                 ])
               ]),
+              PropertyTable(device),
             ])));
+  }
+}
+
+class PropertyTable extends StatelessWidget {
+  final Device device;
+
+  const PropertyTable(this.device, {super.key});
+
+  @override
+  Widget build(context) {
+    return DataTable(
+      sortAscending: true,
+      sortColumnIndex: 1,
+      showBottomBorder: false,
+      columns: const [
+        DataColumn(label: Text('Property', style: const TextStyle(color: colors.primaryText))),
+        DataColumn(label: Text('Value', style: const TextStyle(color: colors.primaryText)), numeric: true),
+      ],
+      rows: [
+        DataRow(
+          cells: [
+            DataCell(Text("UUID", style: const TextStyle(color: colors.primaryText))),
+            DataCell(Text(device.id.toString(),
+                style: const TextStyle(color: colors.primaryText), textAlign: TextAlign.right)),
+          ],
+        ),
+        DataRow(
+          cells: [
+            DataCell(Text("Name", style: const TextStyle(color: colors.primaryText))),
+            DataCell(Text(device.name, style: const TextStyle(color: colors.primaryText), textAlign: TextAlign.right)),
+          ],
+        ),
+        DataRow(
+          cells: [
+            DataCell(Text("Platform", style: const TextStyle(color: colors.primaryText))),
+            DataCell(Text(device.platformName,
+                style: const TextStyle(color: colors.primaryText), textAlign: TextAlign.right)),
+          ],
+        ),
+        DataRow(
+          cells: [
+            DataCell(Text("Manufacturer", style: const TextStyle(color: colors.primaryText))),
+            DataCell(Text(
+                device.manufacturer
+                    .map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown")
+                    .join(", "),
+                style: const TextStyle(color: colors.primaryText),
+                textAlign: TextAlign.right)),
+          ],
+        ),
+      ],
+    );
   }
 }
