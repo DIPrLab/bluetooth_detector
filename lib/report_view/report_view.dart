@@ -1,5 +1,4 @@
-import 'package:bluetooth_detector/styles/button_styles.dart';
-import 'package:bluetooth_detector/styles/text_styles.dart';
+import 'package:bluetooth_detector/styles/styles.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report_view/device_view.dart';

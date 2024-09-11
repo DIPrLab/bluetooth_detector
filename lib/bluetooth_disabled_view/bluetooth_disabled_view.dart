@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 // import 'package:bluetooth_detector/utils/snackbar.dart';
-import 'package:bluetooth_detector/styles/button_styles.dart';
 
 class BluetoothOffView extends StatelessWidget {
   const BluetoothOffView({super.key, this.adapterState});
