@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class LatLngTile extends StatelessWidget {
   LatLngTile(LatLng this.coordinate, {super.key});
 
-  LatLng coordinate;
+  final LatLng coordinate;
 
   Widget CoordinateText(String text) {
     return Padding(
@@ -24,8 +24,10 @@ class LatLngTile extends StatelessWidget {
         child: Center(
             child: Column(
           children: [
-            CoordinateText("Latitude: " + coordinate.latitude.degrees.toString()),
-            CoordinateText("Longitude: " + coordinate.longitude.degrees.toString()),
+            CoordinateText(
+                "Latitude: " + coordinate.latitude.degrees.toString()),
+            CoordinateText(
+                "Longitude: " + coordinate.longitude.degrees.toString()),
           ],
         )));
   }

@@ -8,14 +8,16 @@ import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/settings.dart';
 
 class DeviceView extends StatelessWidget {
-  Settings settings;
-  String deviceID;
-  Report report;
+  final Settings settings;
+  final String deviceID;
+  final Report report;
   late Device device = report.report[deviceID]!;
-  late Iterable<String> manufacturers = device.manufacturer
-      .map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown");
+  late Iterable<String> manufacturers = device.manufacturer.map((e) =>
+      company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
+      "Unknown");
 
-  DeviceView(Settings this.settings, {super.key, required this.deviceID, required this.report});
+  DeviceView(Settings this.settings,
+      {super.key, required this.deviceID, required this.report});
 
   Widget DataRow(String label, String value) {
     if (value.isEmpty) {
@@ -55,13 +57,15 @@ class DeviceView extends StatelessWidget {
                       builder: (context) => SafeArea(
                               child: DeviceMapView(
                             this.settings,
-                            device: deviceID,
+                            device: device,
                             report: report,
                           ))));
             },
             style: AppButtonStyle.buttonWithBackground,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              DataRow("Risk Score", report.riskScore(device, settings).toString()),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              DataRow(
+                  "Risk Score", report.riskScore(device, settings).toString()),
               Table(columnWidths: const {
                 0: FlexColumnWidth(1.0),
                 1: FlexColumnWidth(1.0),
@@ -76,74 +80,13 @@ class DeviceView extends StatelessWidget {
                     "Areas",
                     device.areas(settings.thresholdDistance).length,
                   ),
-                  Tile("Duration", device.timeTravelled(settings.scanTime.toInt()).printFriendly()),
+                  Tile(
+                      "Duration",
+                      device
+                          .timeTravelled(settings.scanTime.toInt())
+                          .printFriendly()),
                 ])
               ]),
-              PropertyTable(device),
             ])));
-  }
-}
-
-class PropertyTable extends StatelessWidget {
-  final Device device;
-
-  const PropertyTable(this.device, {super.key});
-
-  @override
-  Widget build(context) {
-    return DataTable(
-      sortAscending: true,
-      sortColumnIndex: 1,
-      showBottomBorder: false,
-      columns: const [
-        DataColumn(
-            label: Text(
-          'Property',
-        )),
-        DataColumn(
-            label: Text(
-              'Value',
-            ),
-            numeric: true),
-      ],
-      rows: [
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "UUID",
-            )),
-            DataCell(Text(device.id.toString(), textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Name",
-            )),
-            DataCell(Text(device.name, textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Platform",
-            )),
-            DataCell(Text(device.platformName, textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Manufacturer",
-            )),
-            DataCell(Text(
-                device.manufacturer
-                    .map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown")
-                    .join(", "),
-                textAlign: TextAlign.right)),
-          ],
-        ),
-      ],
-    );
   }
 }

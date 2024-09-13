@@ -37,7 +37,7 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
 class SettingsView extends StatefulWidget {
   SettingsView(Settings this.settings, {super.key});
 
-  Settings settings;
+  final Settings settings;
 
   @override
   SettingsViewState createState() => SettingsViewState();
@@ -62,7 +62,10 @@ class SettingsViewState extends State<SettingsView> {
       prefs.setStringList(
           "safeZones",
           widget.settings.safeZones
-              .map((z) => z.latitude.degrees.toString() + "," + z.longitude.degrees.toString())
+              .map((z) =>
+                  z.latitude.degrees.toString() +
+                  "," +
+                  z.longitude.degrees.toString())
               .toList());
     });
   }
@@ -113,7 +116,8 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   widget.settings.scanTime = newValue;
-                  widget.settings.thresholdTime = max(widget.settings.scanTime, widget.settings.thresholdTime);
+                  widget.settings.thresholdTime = max(
+                      widget.settings.scanTime, widget.settings.thresholdTime);
                   save();
                 });
               },
@@ -134,7 +138,8 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   widget.settings.thresholdTime = newValue;
-                  widget.settings.scanTime = min(widget.settings.scanTime, newValue);
+                  widget.settings.scanTime =
+                      min(widget.settings.scanTime, newValue);
                   save();
                 });
               },
@@ -161,8 +166,9 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   widget.settings.scanDistance = newValue;
-                  widget.settings.thresholdDistance =
-                      max(widget.settings.scanDistance, widget.settings.thresholdDistance);
+                  widget.settings.thresholdDistance = max(
+                      widget.settings.scanDistance,
+                      widget.settings.thresholdDistance);
                   save();
                 });
               },
@@ -173,7 +179,8 @@ class SettingsViewState extends State<SettingsView> {
               ),
               Spacer(),
               Text(
-                widget.settings.thresholdDistance.toInt().toString() + " meters",
+                widget.settings.thresholdDistance.toInt().toString() +
+                    " meters",
               ),
             ]),
             Slider(
@@ -183,26 +190,30 @@ class SettingsViewState extends State<SettingsView> {
               onChanged: (newValue) {
                 setState(() {
                   widget.settings.thresholdDistance = newValue;
-                  widget.settings.scanDistance = min(widget.settings.scanDistance, newValue);
+                  widget.settings.scanDistance =
+                      min(widget.settings.scanDistance, newValue);
                   save();
                 });
               },
             ),
             Flexible(
                 child: SingleChildScrollView(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: Text(
-                  "Safe Zones",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-              LocationHeader(onAddLocation: _addLocation),
-              ...widget.settings.safeZones.map(
-                (location) => LatLngTile(location),
-              ),
-            ]))),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Text(
+                      "Safe Zones",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  LocationHeader(onAddLocation: _addLocation),
+                  ...widget.settings.safeZones.map(
+                    (location) => LatLngTile(location),
+                  ),
+                ]))),
           ],
         ),
       ),

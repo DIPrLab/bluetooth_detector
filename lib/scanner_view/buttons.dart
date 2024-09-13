@@ -49,13 +49,43 @@ extension Buttons on ScannerViewState {
           log();
           stopScan();
           write(widget.report);
-          Vibration.vibrate(
-              pattern: [250, 100, 100, 100, 100, 100, 250, 100, 500, 250, 250, 100, 750, 500],
-              intensities: [255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0]);
+          Vibration.vibrate(pattern: [
+            250,
+            100,
+            100,
+            100,
+            100,
+            100,
+            250,
+            100,
+            500,
+            250,
+            250,
+            100,
+            750,
+            500
+          ], intensities: [
+            255,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255,
+            0,
+            255,
+            0
+          ]);
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => SafeArea(child: ReportView(widget.settings, report: widget.report))));
+                  builder: (context) => SafeArea(
+                      child:
+                          ReportView(widget.settings, report: widget.report))));
         },
         child: const Icon(
           Icons.stop,
@@ -77,7 +107,10 @@ extension Buttons on ScannerViewState {
     return FloatingActionButton.large(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SafeArea(child: SettingsView(widget.settings))));
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    SafeArea(child: SettingsView(widget.settings))));
         setState(() {});
       },
       child: Icon(

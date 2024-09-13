@@ -23,8 +23,8 @@ part 'package:bluetooth_detector/scanner_view/scanner.dart';
 class ScannerView extends StatefulWidget {
   ScannerView(Report this.report, Settings this.settings, {super.key});
 
-  Report report;
-  Settings settings;
+  final Report report;
+  final Settings settings;
 
   @override
   ScannerViewState createState() => ScannerViewState();
@@ -49,19 +49,25 @@ class ScannerViewState extends State<ScannerView> {
 
   void log() {
     List<Device> devices = scanResults
-        .map((e) => Device(e.device.remoteId.toString(), e.advertisementData.advName, e.device.platformName,
+        .map((e) => Device(
+            e.device.remoteId.toString(),
+            e.advertisementData.advName,
+            e.device.platformName,
             e.advertisementData.manufacturerData.keys.toList()))
         .toList();
     for (Device d in devices) {
       if (widget.report.report[d.id] == null) {
-        widget.report.report[d.id] = Device(d.id, d.name, d.platformName, d.manufacturer);
+        widget.report.report[d.id] =
+            Device(d.id, d.name, d.platformName, d.manufacturer);
       }
-      widget.report.report[d.id]?.dataPoints.add(Datum(location?.latitude.degrees, location?.longitude.degrees));
+      widget.report.report[d.id]?.dataPoints
+          .add(Datum(location?.latitude.degrees, location?.longitude.degrees));
     }
   }
 
   void enableLocationStream() {
-    positionStream = Geolocator.getPositionStream(locationSettings: Controllers.getLocationSettings(30))
+    positionStream = Geolocator.getPositionStream(
+            locationSettings: Controllers.getLocationSettings(30))
         .listen((Position? position) {
       setState(() {
         location = position?.toLatLng();
@@ -101,7 +107,8 @@ class ScannerViewState extends State<ScannerView> {
       }
     });
 
-    _timeStream = Stream.periodic(Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
+    _timeStream = Stream.periodic(
+        Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
       return DateTime.now();
     });
 

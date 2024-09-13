@@ -78,7 +78,10 @@ class _SplashScreen extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 2), () {});
 
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SafeArea(child: HomePage(widget.report, widget.settings))));
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                SafeArea(child: HomePage(widget.report, widget.settings))));
   }
 
   @override
@@ -111,8 +114,8 @@ class _SplashScreen extends State<SplashScreen> {
 class HomePage extends StatefulWidget {
   HomePage(Report this.report, Settings this.settings, {super.key});
 
-  Report report;
-  Settings settings;
+  final Report report;
+  final Settings settings;
 
   @override
   _HomePage createState() => _HomePage();
