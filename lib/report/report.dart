@@ -23,6 +23,7 @@ class Report {
   DateTime time = DateTime.now();
   Map<String, Device?> report;
   Report(this.report);
+  List<Device?> devices() => report.values.toList();
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
   Map<String, dynamic> toJson() => _$ReportToJson(this);
 }

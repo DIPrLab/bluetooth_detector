@@ -11,7 +11,7 @@ class ReportView extends StatefulWidget {
 
   final Report report;
   final Settings settings;
-  late List<String> devices;
+  late List<Device?> devices;
 
   @override
   ReportViewState createState() => ReportViewState();
@@ -22,7 +22,7 @@ class ReportViewState extends State<ReportView> {
   void initState() {
     super.initState();
 
-    widget.devices = widget.report.report.keys.toList();
+    widget.devices = widget.report.devices();
 
     widget.devices
         .sorted((a, b) => widget.report.report[a]!
@@ -138,8 +138,8 @@ class ReportViewState extends State<ReportView> {
               ])),
           Column(
             children: [
-              ...widget.devices.map((e) => DeviceView(widget.settings,
-                  deviceID: e, report: widget.report)),
+              ...widget.devices.map((device) =>
+                  DeviceView(device!, widget.settings, report: widget.report)),
             ],
           ),
         ],

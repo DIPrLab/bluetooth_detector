@@ -9,15 +9,14 @@ import 'package:bluetooth_detector/settings.dart';
 
 class DeviceView extends StatelessWidget {
   final Settings settings;
-  final String deviceID;
+  final Device device;
   final Report report;
-  late Device device = report.report[deviceID]!;
   late Iterable<String> manufacturers = device.manufacturer.map((e) =>
       company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
       "Unknown");
 
-  DeviceView(Settings this.settings,
-      {super.key, required this.deviceID, required this.report});
+  DeviceView(Device this.device, Settings this.settings,
+      {super.key, required this.report});
 
   Widget DataRow(String label, String value) {
     if (value.isEmpty) {
