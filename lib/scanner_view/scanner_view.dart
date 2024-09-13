@@ -16,6 +16,7 @@ import 'package:bluetooth_detector/settings_view/settings_view.dart';
 import 'package:bluetooth_detector/settings.dart';
 import 'package:vibration/vibration.dart';
 import 'package:latlng/latlng.dart';
+import 'package:universal_ble/universal_ble.dart';
 
 part 'package:bluetooth_detector/scanner_view/buttons.dart';
 part 'package:bluetooth_detector/scanner_view/scanner.dart';

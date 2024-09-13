@@ -22,10 +22,10 @@ extension Scanner on ScannerViewState {
     });
   }
 
-  void probe(BleDevice device) async {
+  void probe(BluetoothDevice device) async {
     if (autoConnect) {
-      await UniversalBle.connect(device.deviceId);
-      await UniversalBle.discoverServices(device.deviceId);
+      await UniversalBle.connect(device.remoteId.toString());
+      await UniversalBle.discoverServices(device.remoteId.toString());
     }
   }
 }
