@@ -11,20 +11,21 @@ class ReportView extends StatefulWidget {
 
   final Report report;
   final Settings settings;
-  late List<Device?> devices;
 
   @override
   ReportViewState createState() => ReportViewState();
 }
 
 class ReportViewState extends State<ReportView> {
+  late List<Device?> devices;
+
   @override
   void initState() {
     super.initState();
 
-    widget.devices = widget.report.devices();
+    devices = widget.report.devices();
 
-    widget.devices
+    devices
         .sorted(
             (a, b) => a!.locations().length.compareTo(b!.locations().length))
         .reversed;
@@ -32,7 +33,7 @@ class ReportViewState extends State<ReportView> {
 
   void sortByTime() {
     setState(() {
-      widget.devices.sorted((a, b) {
+      devices.sorted((a, b) {
         int threshold = widget.settings.thresholdTime.toInt();
         Duration deviceAValue = a!.timeTravelled(threshold);
         Duration deviceBValue = b!.timeTravelled(threshold);
@@ -43,7 +44,7 @@ class ReportViewState extends State<ReportView> {
 
   void sortByIncidence() {
     setState(() {
-      widget.devices.sorted((a, b) {
+      devices.sorted((a, b) {
         int threshold = widget.settings.thresholdTime.toInt();
         int deviceAValue = a!.incidence(threshold);
         int deviceBValue = b!.incidence(threshold);
@@ -54,7 +55,7 @@ class ReportViewState extends State<ReportView> {
 
   void sortByLocation() {
     setState(() {
-      widget.devices.sorted((a, b) {
+      devices.sorted((a, b) {
         int deviceAValue = a!.locations().length;
         int deviceBValue = b!.locations().length;
         return deviceAValue.compareTo(deviceBValue);
@@ -130,7 +131,7 @@ class ReportViewState extends State<ReportView> {
               ])),
           Column(
             children: [
-              ...widget.devices.map((device) =>
+              ...devices.map((device) =>
                   DeviceView(device!, widget.settings, report: widget.report)),
             ],
           ),

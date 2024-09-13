@@ -48,14 +48,14 @@ class _AppState extends State<App> {
 class SplashScreen extends StatefulWidget {
   SplashScreen({super.key});
 
-  late Report report;
-  late Settings settings;
-
   @override
   State<SplashScreen> createState() => _SplashScreen();
 }
 
 class _SplashScreen extends State<SplashScreen> {
+  late Report report;
+  late Settings settings;
+
   @override
   void initState() {
     super.initState();
@@ -69,19 +69,18 @@ class _SplashScreen extends State<SplashScreen> {
 
   Future<void> _loadData() async {
     await readSettings().then((settings) {
-      widget.settings = settings;
+      settings = settings;
       print('Settings loaded');
     });
     await readReport().then((savedReport) {
-      widget.report = savedReport;
+      report = savedReport;
     });
     await Future.delayed(Duration(seconds: 2), () {});
 
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                SafeArea(child: HomePage(widget.report, widget.settings))));
+            builder: (context) => SafeArea(child: HomePage(report, settings))));
   }
 
   @override
