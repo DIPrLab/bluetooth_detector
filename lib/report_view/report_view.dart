@@ -25,21 +25,17 @@ class ReportViewState extends State<ReportView> {
     widget.devices = widget.report.devices();
 
     widget.devices
-        .sorted((a, b) => widget.report.report[a]!
-            .locations()
-            .length
-            .compareTo(widget.report.report[b]!.locations().length))
+        .sorted(
+            (a, b) => a!.locations().length.compareTo(b!.locations().length))
         .reversed;
   }
 
   void sortByTime() {
     setState(() {
       widget.devices.sorted((a, b) {
-        Device deviceA = widget.report.report[a]!;
-        Device deviceB = widget.report.report[b]!;
         int threshold = widget.settings.thresholdTime.toInt();
-        Duration deviceAValue = deviceA.timeTravelled(threshold);
-        Duration deviceBValue = deviceB.timeTravelled(threshold);
+        Duration deviceAValue = a!.timeTravelled(threshold);
+        Duration deviceBValue = b!.timeTravelled(threshold);
         return deviceAValue.compareTo(deviceBValue);
       }).reversed;
     });
@@ -48,11 +44,9 @@ class ReportViewState extends State<ReportView> {
   void sortByIncidence() {
     setState(() {
       widget.devices.sorted((a, b) {
-        Device deviceA = widget.report.report[a]!;
-        Device deviceB = widget.report.report[b]!;
         int threshold = widget.settings.thresholdTime.toInt();
-        int deviceAValue = deviceA.incidence(threshold);
-        int deviceBValue = deviceB.incidence(threshold);
+        int deviceAValue = a!.incidence(threshold);
+        int deviceBValue = b!.incidence(threshold);
         return deviceAValue.compareTo(deviceBValue);
       }).reversed;
     });
@@ -61,10 +55,8 @@ class ReportViewState extends State<ReportView> {
   void sortByLocation() {
     setState(() {
       widget.devices.sorted((a, b) {
-        Device deviceA = widget.report.report[a]!;
-        Device deviceB = widget.report.report[b]!;
-        int deviceAValue = deviceA.locations().length;
-        int deviceBValue = deviceB.locations().length;
+        int deviceAValue = a!.locations().length;
+        int deviceBValue = b!.locations().length;
         return deviceAValue.compareTo(deviceBValue);
       }).reversed;
     });

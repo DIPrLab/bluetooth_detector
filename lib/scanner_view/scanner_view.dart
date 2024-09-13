@@ -48,21 +48,19 @@ class ScannerViewState extends State<ScannerView> {
   late Stream<DateTime> _timeStream;
 
   void log() {
-    List<Device> devices = scanResults
+    scanResults
         .map((e) => Device(
             e.device.remoteId.toString(),
             e.advertisementData.advName,
             e.device.platformName,
             e.advertisementData.manufacturerData.keys.toList()))
-        .toList();
-    for (Device d in devices) {
+        .forEach((Device d) {
       if (widget.report.report[d.id] == null) {
-        widget.report.report[d.id] =
-            Device(d.id, d.name, d.platformName, d.manufacturer);
+        widget.report.report[d.id] = d;
       }
       widget.report.report[d.id]?.dataPoints
           .add(Datum(location?.latitude.degrees, location?.longitude.degrees));
-    }
+    });
   }
 
   void enableLocationStream() {
