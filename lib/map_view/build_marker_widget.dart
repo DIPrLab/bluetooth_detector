@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 
 Widget buildMarkerWidget(BuildContext context, Offset pos, Icon icon, bool backgroundCircle) {
   return Positioned(
@@ -9,8 +8,7 @@ Widget buildMarkerWidget(BuildContext context, Offset pos, Icon icon, bool backg
     height: 48,
     child: GestureDetector(
       child: Center(
-        child: Stack(
-            children: [if (backgroundCircle) Icon(Icons.circle, color: colors.primaryText, size: icon.size), icon]),
+        child: Stack(children: [if (backgroundCircle) Icon(Icons.circle, size: icon.size), icon]),
       ),
       onTap: () {
         showDialog(

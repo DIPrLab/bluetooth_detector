@@ -8,9 +8,9 @@ extension Buttons on ScannerViewState {
         print("Auto Connect: ${autoConnect}");
         setState(() {});
       },
-      backgroundColor: colors.foreground,
-      child: Icon(autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled,
-          color: colors.primaryText),
+      child: Icon(
+        autoConnect ? Icons.bluetooth : Icons.bluetooth_disabled,
+      ),
     );
   }
 
@@ -23,8 +23,9 @@ extension Buttons on ScannerViewState {
           print("Enabling Location Stream");
           setState(() {});
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_disabled, color: colors.primaryText),
+        child: const Icon(
+          Icons.location_disabled,
+        ),
       );
     } else {
       return FloatingActionButton.large(
@@ -34,22 +35,20 @@ extension Buttons on ScannerViewState {
           print("Disabling Location Stream");
           setState(() {});
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.location_searching, color: colors.primaryText),
+        child: const Icon(
+          Icons.location_searching,
+        ),
       );
     }
   }
 
   Widget scanButton() {
-    if (isScanning) {
+    if (FlutterBluePlus.isScanningNow) {
       return FloatingActionButton.large(
         onPressed: () {
           log();
           stopScan();
-          setState(() {
-            isScanning = false;
-          });
-          write(report);
+          write(widget.report);
           Vibration.vibrate(pattern: [
             250,
             100,
@@ -84,22 +83,22 @@ extension Buttons on ScannerViewState {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      SafeArea(child: ReportView(report: report))));
+                  builder: (context) => SafeArea(
+                      child:
+                          ReportView(widget.settings, report: widget.report))));
         },
-        backgroundColor: colors.altText,
-        child: const Icon(Icons.stop, color: colors.primaryText),
+        child: const Icon(
+          Icons.stop,
+        ),
       );
     } else {
       return FloatingActionButton.large(
         onPressed: () {
-          setState(() {
-            isScanning = true;
-          });
           startScan();
         },
-        backgroundColor: colors.foreground,
-        child: const Icon(Icons.play_arrow_rounded, color: colors.primaryText),
+        child: const Icon(
+          Icons.play_arrow_rounded,
+        ),
       );
     }
   }
@@ -110,11 +109,13 @@ extension Buttons on ScannerViewState {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SafeArea(child: SettingsView())));
+                builder: (context) =>
+                    SafeArea(child: SettingsView(widget.settings))));
         setState(() {});
       },
-      backgroundColor: colors.foreground,
-      child: Icon(Icons.settings, color: colors.primaryText),
+      child: Icon(
+        Icons.settings,
+      ),
     );
   }
 }

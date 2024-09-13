@@ -1,24 +1,18 @@
-import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:bluetooth_detector/report_view/device_map_view.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report_view/duration.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
-import 'package:bluetooth_detector/styles/button_styles.dart';
-import 'package:collection/collection.dart';
+import 'package:bluetooth_detector/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 class DeviceView extends StatelessWidget {
-  String deviceID;
-  Report report;
-  late Device device = report.report[deviceID]!;
-  late List<int> manufacturer_identifiers =
-      device.manufacturer.toSet().toList().sorted((a, b) => a.compareTo(b));
-  late Iterable<String> manufacturers = manufacturer_identifiers.map((e) =>
-      company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
-      "Unknown");
+  final Settings settings;
+  final Device device;
+  final Report report;
 
-  DeviceView({super.key, required this.deviceID, required this.report});
+  DeviceView(Device this.device, Settings this.settings,
+      {super.key, required this.report});
 
   Widget DataRow(String label, String value) {
     if (value.isEmpty) {
@@ -30,9 +24,7 @@ class DeviceView extends StatelessWidget {
     }
     text += value;
 
-    return Text(text,
-        style: const TextStyle(color: colors.primaryText),
-        textAlign: TextAlign.left);
+    return Text(text, textAlign: TextAlign.left);
   }
 
   Widget Tile(String label, Object value, [Color? color = null]) {
@@ -59,26 +51,35 @@ class DeviceView extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => SafeArea(
                               child: DeviceMapView(
-                            device: deviceID,
+                            this.settings,
+                            device: device,
                             report: report,
                           ))));
             },
             style: AppButtonStyle.buttonWithBackground,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              DataRow("", device.id.toString()),
-              DataRow("Name", device.name),
-              DataRow("Platform", device.platformName),
-              DataRow("Manufacturer", manufacturers.join(", ")),
+              DataRow(
+                  "Risk Score", report.riskScore(device, settings).toString()),
               Table(columnWidths: const {
                 0: FlexColumnWidth(1.0),
                 1: FlexColumnWidth(1.0),
                 2: FlexColumnWidth(1.0),
               }, children: [
                 TableRow(children: [
-                  Tile("Incidence", device.incidence(), colors.altText),
-                  Tile("Areas", device.areas().length, colors.background),
-                  Tile("Duration", device.timeTravelled().printFriendly()),
+                  Tile(
+                    "Incidence",
+                    device.incidence(settings.scanTime.toInt()),
+                  ),
+                  Tile(
+                    "Areas",
+                    device.areas(settings.thresholdDistance).length,
+                  ),
+                  Tile(
+                      "Duration",
+                      device
+                          .timeTravelled(settings.scanTime.toInt())
+                          .printFriendly()),
                 ])
               ]),
             ])));

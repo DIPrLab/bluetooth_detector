@@ -3,17 +3,15 @@ import 'dart:math';
 
 import 'package:bluetooth_detector/map_view/build_marker_widget.dart';
 import 'package:bluetooth_detector/map_view/tile_servers.dart';
-import 'package:bluetooth_detector/report/datum.dart';
+import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/report/report.dart';
-import 'package:bluetooth_detector/settings.dart';
-import 'package:bluetooth_detector/styles/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 part 'package:bluetooth_detector/map_view/map_view_controllers.dart';
 
@@ -24,15 +22,15 @@ double clamp(double x, double min, double max) {
 }
 
 class MapView extends StatefulWidget {
-  Report report;
+  final Device device;
   MapController? controller;
-  String? deviceID;
+  final Settings settings;
 
   MapView(
-    this.report, {
+    this.device,
+    this.settings, {
     super.key,
     this.controller,
-    this.deviceID,
   });
 
   @override
@@ -59,7 +57,7 @@ class MapViewState extends State<MapView> {
       body: MapLayout(
         controller: widget.controller!,
         builder: (context, transformer) {
-          List<Widget>? markerWidgets = widget.report.report[widget.deviceID]!
+          List<Widget>? markerWidgets = widget.device
               .locations()
               .toList()
               .map((location) => buildMarkerWidget(
@@ -85,7 +83,12 @@ class MapViewState extends State<MapView> {
               onPointerSignal: (event) {
                 if (event is PointerScrollEvent) {
                   transformer.setZoomInPlace(
-                      clamp(widget.controller!.zoom + event.scrollDelta.dy / -1000.0, 2, 18), event.localPosition);
+                      clamp(
+                          widget.controller!.zoom +
+                              event.scrollDelta.dy / -1000.0,
+                          2,
+                          18),
+                      event.localPosition);
                   setState(() {});
                 }
               },
@@ -112,7 +115,8 @@ class MapViewState extends State<MapView> {
                     },
                   ),
                   CustomPaint(
-                    painter: PolylinePainter(transformer, widget.report, deviceID: widget.deviceID),
+                    painter: PolylinePainter(
+                        transformer, widget.device, widget.settings),
                   ),
                   ...markerWidgets,
                 ],
@@ -126,10 +130,10 @@ class MapViewState extends State<MapView> {
 }
 
 class PolylinePainter extends CustomPainter {
-  PolylinePainter(this.transformer, this.report, {this.deviceID});
+  PolylinePainter(this.transformer, this.device, this.settings);
 
-  Report report;
-  String? deviceID;
+  Device device;
+  Settings settings;
   final MapTransformer transformer;
 
   Offset generateOffsetPosition(Position p) {
@@ -144,19 +148,13 @@ class PolylinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..strokeWidth = 4;
-    List<Datum> x = report.report[deviceID]!.dataPoints.sorted((x, y) {
-      return x.time.compareTo(y.time);
+    device.paths(settings.thresholdTime.toInt()).forEach((Path path) {
+      for (int i = 0; i < path.length - 1; i++) {
+        Offset p1 = generateOffsetLatLng(path[i].location);
+        Offset p2 = generateOffsetLatLng(path[i + 1].location);
+        canvas.drawLine(p1, p2, paint);
+      }
     });
-
-    paint.color = colors.altText;
-    for (int i = 0; i < x.length - 1; i++) {
-      DateTime time1 = x[i].time;
-      DateTime time2 = x[i + 1].time;
-      if (time2.difference(time1) > Duration(seconds: Settings.shared.scanTime.toInt())) continue;
-      Offset p1 = generateOffsetLatLng(x[i].location()!);
-      Offset p2 = generateOffsetLatLng(x[i + 1].location()!);
-      canvas.drawLine(p1, p2, paint);
-    }
   }
 
   // Since this Sky painter has no fields, it always paints
