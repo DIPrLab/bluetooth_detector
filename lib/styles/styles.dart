@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bluetooth_detector/styles/themes.dart';
 
 class TextStyles {
   static var normal = const TextStyle();
@@ -14,10 +15,13 @@ class TextStyles {
 
 class AppButtonStyle {
   static ButtonStyle buttonWithBackground = ButtonStyle(
-    shape: WidgetStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)))),
+    backgroundColor: WidgetStatePropertyAll(colors.foreground),
+    shape: WidgetStateProperty.all(const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0)))),
   );
 
   static ButtonStyle buttonWithoutBackground = ButtonStyle(
-    shape: WidgetStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)))),
+    shape: WidgetStateProperty.all(const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0)))),
   );
 }
