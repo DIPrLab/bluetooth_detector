@@ -35,6 +35,7 @@ class colors {
 
 class Themes {
   static ThemeData darkMode = ThemeData(
+    scaffoldBackgroundColor: colors.background,
     canvasColor: colors.background,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.black,
