@@ -1,4 +1,3 @@
-import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
 
@@ -54,15 +53,7 @@ class PropertyTable extends StatelessWidget {
             DataCell(Text(
               "Manufacturer",
             )),
-            DataCell(Text(
-                device.manufacturer
-                    .map((e) =>
-                        company_identifiers[e
-                            .toRadixString(16)
-                            .toUpperCase()
-                            .padLeft(4, "0")] ??
-                        "Unknown")
-                    .join(", "),
+            DataCell(Text(device.manufacturers().join(", "),
                 textAlign: TextAlign.right)),
           ],
         ),
