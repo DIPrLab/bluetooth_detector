@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlng/latlng.dart';
 import 'package:bluetooth_detector/report/datum.dart';
 import 'package:bluetooth_detector/report/report.dart';
-import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'device.g.dart';
@@ -23,10 +22,6 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
 
-  Iterable<String> manufacturers() => manufacturer.map((e) =>
-      company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
-      "Unknown");
-
   Set<LatLng> locations() {
     Set<LatLng> locations = {};
     this.dataPoints.forEach((dataPoint) {
@@ -40,8 +35,7 @@ class Device {
 
   int incidence(int thresholdTime) {
     int result = 0;
-    List<Datum> dataPoints =
-        this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
+    List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
     while (dataPoints.length > 1) {
       DateTime a = dataPoints.elementAt(0).time;
       DateTime b = dataPoints.elementAt(1).time;
@@ -62,10 +56,7 @@ class Device {
       for (Area area in result) {
         for (LatLng location in area) {
           double distance = Geolocator.distanceBetween(
-              curr.latitude.degrees,
-              curr.longitude.degrees,
-              location.latitude.degrees,
-              location.longitude.degrees);
+              curr.latitude.degrees, curr.longitude.degrees, location.latitude.degrees, location.longitude.degrees);
           if (distance <= thresholdDistance) {
             area.add(curr);
             break;
@@ -86,8 +77,7 @@ class Device {
 
   Duration timeTravelled(int thresholdTime) {
     Duration result = Duration();
-    List<Datum> dataPoints =
-        this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
+    List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
 
     for (int i = 0; i < dataPoints.length - 1; i++) {
       DateTime time1 = dataPoints[i].time;
@@ -103,12 +93,8 @@ class Device {
 
   List<Path> paths(int thresholdTime) {
     List<Path> paths = <Path>[];
-    List<PathComponent> dataPoints = this
-        .dataPoints
-        .where((dataPoint) => dataPoint.location() != null)
-        .map((datum) {
-      LatLng location = LatLng.degree(datum.location()!.latitude.degrees,
-          datum.location()!.longitude.degrees);
+    List<PathComponent> dataPoints = this.dataPoints.where((dataPoint) => dataPoint.location() != null).map((datum) {
+      LatLng location = LatLng.degree(datum.location()!.latitude.degrees, datum.location()!.longitude.degrees);
       return PathComponent(datum.time, location);
     }).sorted((a, b) => a.time.compareTo(b.time));
 
@@ -139,11 +125,8 @@ class Device {
       for (int i = 0; i < path.length - 1; i++) {
         PathComponent pc1 = path[i];
         PathComponent pc2 = path[i + 1];
-        double distance = Geolocator.distanceBetween(
-            pc1.location.latitude.degrees,
-            pc1.location.longitude.degrees,
-            pc2.location.latitude.degrees,
-            pc2.location.longitude.degrees);
+        double distance = Geolocator.distanceBetween(pc1.location.latitude.degrees, pc1.location.longitude.degrees,
+            pc2.location.latitude.degrees, pc2.location.longitude.degrees);
         result += distance;
       }
       return result;

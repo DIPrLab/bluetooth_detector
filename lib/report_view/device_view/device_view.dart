@@ -1,3 +1,4 @@
+import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:bluetooth_detector/report_view/device_map_view.dart';
 import 'package:bluetooth_detector/report/report.dart';
 import 'package:bluetooth_detector/report_view/duration.dart';
@@ -10,6 +11,9 @@ class DeviceView extends StatelessWidget {
   final Settings settings;
   final Device device;
   final Report report;
+  late Iterable<String> manufacturers = device.manufacturer.map((e) =>
+      company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
+      "Unknown");
 
   DeviceView(Device this.device, Settings this.settings,
       {super.key, required this.report});
