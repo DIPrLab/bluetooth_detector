@@ -69,7 +69,7 @@ class _SplashScreen extends State<SplashScreen> {
 
   Future<void> _loadData() async {
     await readSettings().then((settings) {
-      settings = settings;
+      this.settings = settings;
       print('Settings loaded');
     });
     await readReport().then((savedReport) {
