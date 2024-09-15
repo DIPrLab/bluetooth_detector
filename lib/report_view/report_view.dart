@@ -33,33 +33,55 @@ class ReportViewState extends State<ReportView> {
 
   void sortByTime() {
     setState(() {
-      devices.sorted((a, b) {
-        int threshold = widget.settings.thresholdTime.toInt();
-        Duration deviceAValue = a!.timeTravelled(threshold);
-        Duration deviceBValue = b!.timeTravelled(threshold);
-        return deviceAValue.compareTo(deviceBValue);
-      }).reversed;
+      devices = devices
+          .sorted((a, b) {
+            int threshold = widget.settings.thresholdTime.toInt();
+            Duration deviceAValue = a!.timeTravelled(threshold);
+            Duration deviceBValue = b!.timeTravelled(threshold);
+            return deviceAValue.compareTo(deviceBValue);
+          })
+          .reversed
+          .toList();
     });
   }
 
   void sortByIncidence() {
     setState(() {
-      devices.sorted((a, b) {
-        int threshold = widget.settings.thresholdTime.toInt();
-        int deviceAValue = a!.incidence(threshold);
-        int deviceBValue = b!.incidence(threshold);
-        return deviceAValue.compareTo(deviceBValue);
-      }).reversed;
+      devices = devices
+          .sorted((a, b) {
+            int threshold = widget.settings.thresholdTime.toInt();
+            int deviceAValue = a!.incidence(threshold);
+            int deviceBValue = b!.incidence(threshold);
+            return deviceAValue.compareTo(deviceBValue);
+          })
+          .reversed
+          .toList();
     });
   }
 
   void sortByLocation() {
     setState(() {
-      devices.sorted((a, b) {
-        int deviceAValue = a!.locations().length;
-        int deviceBValue = b!.locations().length;
-        return deviceAValue.compareTo(deviceBValue);
-      }).reversed;
+      devices = devices
+          .sorted((a, b) {
+            int deviceAValue = a!.locations().length;
+            int deviceBValue = b!.locations().length;
+            return deviceAValue.compareTo(deviceBValue);
+          })
+          .reversed
+          .toList();
+    });
+  }
+
+  void sortByRisk() {
+    setState(() {
+      devices = devices
+          .sorted((a, b) {
+            num deviceAValue = widget.report.riskScore(a!, widget.settings);
+            num deviceBValue = widget.report.riskScore(b!, widget.settings);
+            return deviceAValue.compareTo(deviceBValue);
+          })
+          .reversed
+          .toList();
     });
   }
 
@@ -69,6 +91,16 @@ class ReportViewState extends State<ReportView> {
         Icons.sort,
       ),
       itemBuilder: (BuildContext context) => [
+        PopupMenuItem(
+          child: ListTile(
+            title: Text('Sort By Risk', style: TextStyles.normal),
+          ),
+          onTap: (() {
+            setState(() {
+              sortByRisk();
+            });
+          }),
+        ),
         PopupMenuItem(
           child: ListTile(
             title: Text('Sort By Incidence', style: TextStyles.normal),
