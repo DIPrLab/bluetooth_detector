@@ -30,7 +30,7 @@ class Device {
   Set<LatLng> locations() {
     Set<LatLng> locations = {};
     this.dataPoints.forEach((dataPoint) {
-      LatLng? location = dataPoint.location();
+      LatLng? location = dataPoint.location;
       if (location != null) {
         locations.add(location);
       }
@@ -105,10 +105,9 @@ class Device {
     List<Path> paths = <Path>[];
     List<PathComponent> dataPoints = this
         .dataPoints
-        .where((dataPoint) => dataPoint.location() != null)
+        .where((dataPoint) => dataPoint.location != null)
         .map((datum) {
-      LatLng location = LatLng.degree(datum.location()!.latitude.degrees,
-          datum.location()!.longitude.degrees);
+      LatLng location = datum.location!;
       return PathComponent(datum.time, location);
     }).sorted((a, b) => a.time.compareTo(b.time));
 

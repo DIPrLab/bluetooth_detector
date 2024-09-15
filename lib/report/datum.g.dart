@@ -6,13 +6,22 @@ part of 'datum.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+LatLng? fromString(String latlng) {
+  List<double> components = latlng.split(",").map((x) {
+    assert(x.toDouble() is! Error);
+    return x.toDouble();
+  }).toList();
+  return components.length == 2
+      ? LatLng.degree(components[0], components[1])
+      : null;
+}
+
 Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
-      (json['latitude'] as num?)?.toDouble(),
-      (json['longitude'] as num?)?.toDouble(),
+      fromString((json['location'] ?? "" as String?)),
     )..time = DateTime.parse(json['time'] as String);
 
 Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
-      "\"latitude\"": instance.latitude,
-      "\"longitude\"": instance.longitude,
+      "\"location\"":
+          "\"${instance.location?.latitude.degrees.toString()},${instance.location?.longitude.degrees.toString()}\"",
       "\"time\"": "\"${instance.time.toIso8601String()}\"",
     };
