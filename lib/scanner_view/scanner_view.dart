@@ -49,17 +49,16 @@ class ScannerViewState extends State<ScannerView> {
 
   void log() {
     scanResults
-        .map((e) => Device(
+        .map((ScanResult e) => Device(
             e.device.remoteId.toString(),
             e.advertisementData.advName,
             e.device.platformName,
             e.advertisementData.manufacturerData.keys.toList()))
         .forEach((Device d) {
-      if (widget.report.report[d.id] == null) {
+      if (!widget.report.report.keys.contains(d.id)) {
         widget.report.report[d.id] = d;
       }
-      widget.report.report[d.id]?.dataPoints
-          .add(Datum(location?.latitude.degrees, location?.longitude.degrees));
+      widget.report.report[d.id]?.dataPoints.add(Datum(location));
     });
   }
 
