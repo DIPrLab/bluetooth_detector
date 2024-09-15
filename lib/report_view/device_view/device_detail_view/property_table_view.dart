@@ -6,6 +6,15 @@ class PropertyTable extends StatelessWidget {
 
   const PropertyTable(this.device, {super.key});
 
+  DataRow Row(String label, String value) {
+    return DataRow(
+      cells: [
+        DataCell(Text(label, softWrap: true)),
+        DataCell(Text(value, softWrap: true, textAlign: TextAlign.right)),
+      ],
+    );
+  }
+
   @override
   Widget build(context) {
     return DataTable(
@@ -13,50 +22,14 @@ class PropertyTable extends StatelessWidget {
       sortColumnIndex: 1,
       showBottomBorder: false,
       columns: const [
-        DataColumn(
-            label: Text(
-          'Property',
-        )),
-        DataColumn(
-            label: Text(
-              'Value',
-            ),
-            numeric: true),
+        DataColumn(label: Text("")),
+        DataColumn(label: Text(""), numeric: true),
       ],
       rows: [
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "UUID",
-            )),
-            DataCell(Text(device.id.toString(), textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Name",
-            )),
-            DataCell(Text(device.name, textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Platform",
-            )),
-            DataCell(Text(device.platformName, textAlign: TextAlign.right)),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text(
-              "Manufacturer",
-            )),
-            DataCell(Text(device.manufacturers().join(", "),
-                textAlign: TextAlign.right)),
-          ],
-        ),
+        Row("UUID", device.id.toString()),
+        Row("Name", device.name),
+        Row("Platform", device.platformName),
+        Row("Manufacturer", device.manufacturers().join(", ")),
       ],
     );
   }
