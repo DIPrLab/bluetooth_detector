@@ -10,21 +10,23 @@ class DeviceDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-        child: Column(children: [
-          Row(children: [
-            BackButton(
-              onPressed: () => Navigator.pop(context),
-              style: AppButtonStyle.buttonWithBackground,
-            ),
-            Spacer(),
-          ]),
-          PropertyTable(device),
-          TextButton(
-            onPressed: () {},
-            child: Spacer(),
-          ),
-        ]));
+    return Scaffold(
+        body: Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+            child: Column(children: [
+              Row(children: [
+                BackButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: AppButtonStyle.buttonWithBackground,
+                ),
+                Spacer(),
+              ]),
+              PropertyTable(device),
+              TextButton(
+                onPressed: () {},
+                child: Spacer(),
+              ),
+            ])));
   }
 }
