@@ -6,6 +6,7 @@ import 'package:bluetooth_detector/settings.dart';
 import 'package:stats/stats.dart';
 
 part 'report.g.dart';
+part 'report_cache.dart';
 part 'report_stats.dart';
 
 typedef Area = Set<LatLng>;
@@ -22,7 +23,17 @@ class PathComponent {
 class Report {
   DateTime time = DateTime.now();
   Map<String, Device?> report;
-  Report(this.report);
+
+  late num _riskScore;
+  late Duration _timeTravelled;
+  late int _incidence;
+  late Set<Area> _areas;
+  late double _distanceTravelled;
+
+  Report(this.report) {
+    initCache();
+  }
+
   List<Device?> devices() => report.values.toList();
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
   Map<String, dynamic> toJson() => _$ReportToJson(this);
