@@ -54,13 +54,13 @@ class Device {
 
   Set<Area> areas(double thresholdDistance) {
     Set<Area> result = {};
-    for (LatLng curr in locations()) {
+    locations().forEach((curr) {
       if (result.isEmpty) {
         result.add({curr});
-        continue;
+        return;
       }
-      for (Area area in result) {
-        for (LatLng location in area) {
+      result.forEach((area) {
+        area.forEach((location) {
           double distance = Geolocator.distanceBetween(
               curr.latitude.degrees,
               curr.longitude.degrees,
@@ -68,19 +68,19 @@ class Device {
               location.longitude.degrees);
           if (distance <= thresholdDistance) {
             area.add(curr);
-            break;
+            return;
           }
-        }
-      }
-    }
-    for (Area area1 in result) {
-      for (Area area2 in result.difference({area1})) {
+        });
+      });
+    });
+    result.forEach((area1) {
+      result.difference({area1}).forEach((area2) {
         if (area1.intersection(area2).isNotEmpty) {
           area1 = area1.union(area2);
           result.remove(area2);
         }
-      }
-    }
+      });
+    });
     return result;
   }
 
