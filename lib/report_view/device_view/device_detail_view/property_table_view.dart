@@ -3,8 +3,20 @@ import 'package:bluetooth_detector/report/device.dart';
 
 class PropertyTable extends StatelessWidget {
   final Device device;
+  late List<DataRow> rows;
 
-  const PropertyTable(this.device, {super.key});
+  PropertyTable(this.device, {super.key}) {
+    rows.add(Row("UUID", device.id.toString()));
+    if (!device.name.isEmpty) {
+      rows.add(Row("Name", device.name));
+    }
+    if (!device.platformName.isEmpty) {
+      Row("Platform", device.platformName);
+    }
+    if (!device.manufacturer.isEmpty) {
+      Row("Manufacturer", device.manufacturers().join(", "));
+    }
+  }
 
   DataRow Row(String label, String value) {
     return DataRow(
@@ -25,12 +37,7 @@ class PropertyTable extends StatelessWidget {
         DataColumn(label: Text("")),
         DataColumn(label: Text(""), numeric: true),
       ],
-      rows: [
-        Row("UUID", device.id.toString()),
-        Row("Name", device.name),
-        Row("Platform", device.platformName),
-        Row("Manufacturer", device.manufacturers().join(", ")),
-      ],
+      rows: rows,
     );
   }
 }
