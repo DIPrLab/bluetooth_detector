@@ -22,7 +22,7 @@ class PathComponent {
 @JsonSerializable()
 class Report {
   DateTime time = DateTime.now();
-  Map<String, Device?> report;
+  Map<String, Device?> data;
 
   late num _riskScore;
   late Duration _timeTravelled;
@@ -30,11 +30,11 @@ class Report {
   late Set<Area> _areas;
   late double _distanceTravelled;
 
-  Report(this.report) {
+  Report(this.data) {
     initCache();
   }
 
-  List<Device?> devices() => report.values.toList();
+  List<Device?> devices() => data.values.toList();
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
   Map<String, dynamic> toJson() => _$ReportToJson(this);
 }

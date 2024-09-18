@@ -59,6 +59,7 @@ class ScannerViewState extends State<ScannerView> {
         widget.report.report[d.id] = d;
       }
       widget.report.report[d.id]?.dataPoints.add(Datum(location));
+      widget.report.data[d.id]?.dataPoints.add(Datum(location));
     });
   }
 

@@ -28,21 +28,21 @@ extension Statistics on Report {
   }
 
   List<int> areas(Settings settings) {
-    return report.entries
+    return data.entries
         .map((device) => device.value)
         .map((device) => device?.areas(settings.thresholdDistance).length ?? 0)
         .toList();
   }
 
   List<int> incidence(Settings settings) {
-    return report.entries
+    return data.entries
         .map((device) => device.value)
         .map((device) => device?.incidence(settings.thresholdTime.toInt()) ?? 0)
         .toList();
   }
 
   List<int> timeTravelled(Settings settings) {
-    return report.entries
+    return data.entries
         .map((device) => device.value)
         .map((device) => device?.timeTravelled(settings.thresholdTime.toInt()) ?? Duration(seconds: 0))
         .map((duration) => duration.inSeconds)
@@ -50,7 +50,7 @@ extension Statistics on Report {
   }
 
   List<double> distanceTravelled(Settings settings) {
-    return report.entries
+    return data.entries
         .map((device) => device.value)
         .map((device) => device?.distanceTravelled(settings.thresholdTime.toInt()) ?? 0)
         .toList();
