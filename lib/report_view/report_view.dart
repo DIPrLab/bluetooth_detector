@@ -23,12 +23,13 @@ class ReportViewState extends State<ReportView> {
   void initState() {
     super.initState();
 
-    devices = widget.report.devices();
+    widget.report.refreshCache(widget.settings);
 
-    devices
-        .sorted(
-            (a, b) => a!.locations().length.compareTo(b!.locations().length))
-        .reversed;
+    devices = widget.report
+        .devices()
+        .sorted((a, b) => a!.locations().length.compareTo(b!.locations().length))
+        .reversed
+        .toList();
   }
 
   void sortByTime() {
@@ -147,8 +148,7 @@ class ReportViewState extends State<ReportView> {
                     const Spacer(),
                     Padding(
                       padding: const EdgeInsets.all(4),
-                      child: Text("Report",
-                          textAlign: TextAlign.center, style: TextStyles.title),
+                      child: Text("Report", textAlign: TextAlign.center, style: TextStyles.title),
                     ),
                     const Spacer(),
                   ],
@@ -163,8 +163,7 @@ class ReportViewState extends State<ReportView> {
               ])),
           Column(
             children: [
-              ...devices.map((device) =>
-                  DeviceView(device!, widget.settings, report: widget.report)),
+              ...devices.map((device) => DeviceView(device!, widget.settings, report: widget.report)),
             ],
           ),
         ],
