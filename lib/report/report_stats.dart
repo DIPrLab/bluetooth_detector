@@ -16,14 +16,6 @@ extension Statistics on Report {
   static double zScore(num x, Iterable<num> collection) {
     Stats stats = Stats.fromData(collection);
     double result = stats.standardDeviation == 0 ? 0 : (x - stats.average) / stats.standardDeviation;
-    print("(" +
-        x.toString() +
-        " - " +
-        stats.average.toString() +
-        ") / " +
-        stats.standardDeviation.toString() +
-        " = " +
-        result.toString());
     return result;
   }
 
