@@ -24,10 +24,10 @@ class Report {
   DateTime time = DateTime.now();
   Map<String, Device?> data;
 
-  Stats timeTravelledStats = Stats.fromData([]);
-  Stats incidenceStats = Stats.fromData([]);
-  Stats areaStats = Stats.fromData([]);
-  Stats distanceTravelledStats = Stats.fromData([]);
+  late Stats timeTravelledStats;
+  late Stats incidenceStats;
+  late Stats areaStats;
+  late Stats distanceTravelledStats;
 
   Report(this.data);
 
