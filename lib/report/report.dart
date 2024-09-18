@@ -24,15 +24,12 @@ class Report {
   DateTime time = DateTime.now();
   Map<String, Device?> data;
 
-  late num _riskScore;
-  late Duration _timeTravelled;
-  late int _incidence;
-  late Set<Area> _areas;
-  late double _distanceTravelled;
+  Stats timeTravelledStats = Stats.fromData([]);
+  Stats incidenceStats = Stats.fromData([]);
+  Stats areaStats = Stats.fromData([]);
+  Stats distanceTravelledStats = Stats.fromData([]);
 
-  Report(this.data) {
-    initCache();
-  }
+  Report(this.data);
 
   List<Device?> devices() => data.values.toList();
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);

@@ -3,48 +3,29 @@ part of 'report.dart';
 extension Statistics on Report {
   num riskScore(Device device, Settings settings) {
     Iterable<num> data = [
-      (device.timeTravelled(settings.thresholdTime.toInt()).inSeconds, this.timeTravelled(settings)),
-      (device.incidence(settings.thresholdTime.toInt()), this.incidence(settings)),
-      (device.areas(settings.thresholdDistance).length, this.areas(settings)),
-      (device.distanceTravelled(settings.thresholdTime.toInt()), this.distanceTravelled(settings)),
+      (device.timeTravelled(settings.thresholdTime.toInt()).inSeconds, timeTravelledStats),
+      (device.incidence(settings.thresholdTime.toInt()), incidenceStats),
+      (device.areas(settings.thresholdDistance).length, areaStats),
+      (device.distanceTravelled(settings.thresholdTime.toInt()), distanceTravelledStats),
     ].map((metric) => max(0, zScore(metric.$1, metric.$2)));
     num avgResult = Stats.fromData(data).average;
     // num addResult = data.reduce((a, b) => a + b);
     return avgResult;
   }
 
-  static double zScore(num x, Iterable<num> collection) {
-    Stats stats = Stats.fromData(collection);
-    double result = stats.standardDeviation == 0 ? 0 : (x - stats.average) / stats.standardDeviation;
-    return result;
-  }
+  static double zScore(num x, Stats stats) =>
+      stats.standardDeviation == 0 ? 0 : (x - stats.average) / stats.standardDeviation;
 
-  List<int> areas(Settings settings) {
-    return data.entries
-        .map((device) => device.value)
-        .map((device) => device?.areas(settings.thresholdDistance).length ?? 0)
-        .toList();
-  }
+  Stats _areaStats(Iterable<Device> devices, Settings settings) =>
+      Stats.fromData(devices.map((device) => device.areas(settings.thresholdDistance).length ?? 0));
 
-  List<int> incidence(Settings settings) {
-    return data.entries
-        .map((device) => device.value)
-        .map((device) => device?.incidence(settings.thresholdTime.toInt()) ?? 0)
-        .toList();
-  }
+  Stats _incidenceStats(Iterable<Device> devices, Settings settings) =>
+      Stats.fromData(devices.map((device) => device.incidence(settings.thresholdTime.toInt()) ?? 0));
 
-  List<int> timeTravelled(Settings settings) {
-    return data.entries
-        .map((device) => device.value)
-        .map((device) => device?.timeTravelled(settings.thresholdTime.toInt()) ?? Duration(seconds: 0))
-        .map((duration) => duration.inSeconds)
-        .toList();
-  }
+  Stats _timeTravelledStats(Iterable<Device> devices, Settings settings) => Stats.fromData(devices
+      .map((device) => device.timeTravelled(settings.thresholdTime.toInt()) ?? Duration(seconds: 0))
+      .map((duration) => duration.inSeconds));
 
-  List<double> distanceTravelled(Settings settings) {
-    return data.entries
-        .map((device) => device.value)
-        .map((device) => device?.distanceTravelled(settings.thresholdTime.toInt()) ?? 0)
-        .toList();
-  }
+  Stats _distanceTravelledStats(Iterable<Device> devices, Settings settings) =>
+      Stats.fromData(devices.map((device) => device.distanceTravelled(settings.thresholdTime.toInt()) ?? 0));
 }
