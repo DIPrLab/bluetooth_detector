@@ -40,25 +40,17 @@ class ScannerViewState extends State<ScannerView> {
   bool isScanning = false;
   late StreamSubscription<bool> isScanningSubscription;
   late StreamSubscription<List<ScanResult>> scanResultsSubscription;
-  List<ScanResult> scanResults = [];
-  List<BluetoothDevice> systemDevices = [];
+  List<Device> devices = [];
 
   late StreamSubscription<DateTime> timeStreamSubscription;
 
   late Stream<DateTime> _timeStream;
 
   void log() {
-    scanResults
-        .map((ScanResult e) => Device(
-            e.device.remoteId.toString(),
-            e.advertisementData.advName,
-            e.device.platformName,
-            e.advertisementData.manufacturerData.keys.toList()))
-        .forEach((Device d) {
-      if (!widget.report.report.keys.contains(d.id)) {
-        widget.report.report[d.id] = d;
+    devices.forEach((Device d) {
+      if (!widget.report.data.keys.contains(d.id)) {
+        widget.report.data[d.id] = d;
       }
-      widget.report.report[d.id]?.dataPoints.add(Datum(location));
       widget.report.data[d.id]?.dataPoints.add(Datum(location));
     });
   }
@@ -89,8 +81,11 @@ class ScannerViewState extends State<ScannerView> {
     enableLocationStream();
 
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen((results) {
-      scanResults = results;
       probe(results.last.device);
+      devices = results
+          .map((ScanResult e) => Device(e.device.remoteId.toString(), e.advertisementData.advName,
+              e.device.platformName, e.advertisementData.manufacturerData.keys.toList()))
+          .toList();
       if (mounted) {
         setState(() {});
       }
