@@ -3,7 +3,7 @@ import 'package:bluetooth_detector/report/device.dart';
 
 class PropertyTable extends StatelessWidget {
   final Device device;
-  late List<DataRow> rows;
+  List<DataRow> rows = [];
 
   PropertyTable(this.device, {super.key}) {
     rows.add(Row("UUID", device.id.toString()));
