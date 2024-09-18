@@ -56,8 +56,7 @@ class ScannerViewState extends State<ScannerView> {
   }
 
   void enableLocationStream() {
-    positionStream = Geolocator.getPositionStream(
-            locationSettings: Controllers.getLocationSettings(30))
+    positionStream = Geolocator.getPositionStream(locationSettings: Controllers.getLocationSettings(30))
         .listen((Position? position) {
       setState(() {
         location = position?.toLatLng();
@@ -81,11 +80,13 @@ class ScannerViewState extends State<ScannerView> {
     enableLocationStream();
 
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen((results) {
-      probe(results.last.device);
       devices = results
           .map((ScanResult e) => Device(e.device.remoteId.toString(), e.advertisementData.advName,
               e.device.platformName, e.advertisementData.manufacturerData.keys.toList()))
           .toList();
+      results.forEach((result) {
+        probe(result.device);
+      });
       if (mounted) {
         setState(() {});
       }
@@ -100,8 +101,7 @@ class ScannerViewState extends State<ScannerView> {
       }
     });
 
-    _timeStream = Stream.periodic(
-        Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
+    _timeStream = Stream.periodic(Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
       return DateTime.now();
     });
 
