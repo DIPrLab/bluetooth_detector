@@ -1,21 +1,30 @@
+import 'package:bluetooth_detector/report_view/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 class PropertyTable extends StatelessWidget {
   final Device device;
+  final Settings settings;
   List<DataRow> rows = [];
 
-  PropertyTable(this.device, {super.key}) {
+  PropertyTable(this.device, this.settings, {super.key}) {
     rows.add(Row("UUID", device.id.toString()));
     if (!device.name.isEmpty) {
       rows.add(Row("Name", device.name));
     }
     if (!device.platformName.isEmpty) {
-      Row("Platform", device.platformName);
+      rows.add(Row("Platform", device.platformName));
     }
     if (!device.manufacturer.isEmpty) {
-      Row("Manufacturer", device.manufacturers().join(", "));
+      rows.add(Row("Manufacturer", device.manufacturers().join(", ")));
     }
+    rows.add(Row(
+      "Incidence",
+      device.incidence(settings.scanTime.toInt()).toString(),
+    ));
+    rows.add(Row("Areas", device.areas(settings.thresholdDistance).length.toString()));
+    rows.add(Row("Duration", device.timeTravelled(settings.scanTime.toInt()).printFriendly()));
   }
 
   DataRow Row(String label, String value) {
