@@ -27,6 +27,7 @@ class ReportViewState extends State<ReportView> {
 
     devices = widget.report
         .devices()
+        .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
         .sorted((a, b) => a!.locations().length.compareTo(b!.locations().length))
         .reversed
         .toList();
@@ -35,6 +36,7 @@ class ReportViewState extends State<ReportView> {
   void sortByTime() {
     setState(() {
       devices = devices
+          .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
           .sorted((a, b) {
             int threshold = widget.settings.thresholdTime.toInt();
             Duration deviceAValue = a!.timeTravelled(threshold);
@@ -49,6 +51,7 @@ class ReportViewState extends State<ReportView> {
   void sortByIncidence() {
     setState(() {
       devices = devices
+          .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
           .sorted((a, b) {
             int threshold = widget.settings.thresholdTime.toInt();
             int deviceAValue = a!.incidence(threshold);
@@ -63,6 +66,7 @@ class ReportViewState extends State<ReportView> {
   void sortByLocation() {
     setState(() {
       devices = devices
+          .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
           .sorted((a, b) {
             int deviceAValue = a!.locations().length;
             int deviceBValue = b!.locations().length;
@@ -76,6 +80,7 @@ class ReportViewState extends State<ReportView> {
   void sortByRisk() {
     setState(() {
       devices = devices
+          .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
           .sorted((a, b) {
             num deviceAValue = widget.report.riskScore(a!, widget.settings);
             num deviceBValue = widget.report.riskScore(b!, widget.settings);
