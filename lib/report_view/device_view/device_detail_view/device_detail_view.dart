@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/styles/styles.dart';
 import 'package:bluetooth_detector/settings.dart';
+import 'package:bluetooth_detector/report/report.dart';
 
 class DeviceDetailView extends StatelessWidget {
   final Device device;
+  final Report report;
   final Settings settings;
 
-  DeviceDetailView(this.device, this.settings);
+  DeviceDetailView(this.device, this.report, this.settings);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class DeviceDetailView extends StatelessWidget {
                     ]),
                     Row(children: [Spacer(), Text("Device Details", style: TextStyles.title), Spacer()]),
                   ]),
-                  PropertyTable(device, settings),
+                  PropertyTable(device, report, settings),
                   TextButton(
                     onPressed: () {},
                     child: Spacer(),
