@@ -74,13 +74,14 @@ class _SplashScreen extends State<SplashScreen> {
     });
     await readReport().then((savedReport) {
       report = savedReport;
+    }).then((x) {
+      write(report);
+    }).then((x) {
+      print("Done!");
     });
     await Future.delayed(Duration(seconds: 2), () {});
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SafeArea(child: HomePage(report, settings))));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SafeArea(child: HomePage(report, settings))));
   }
 
   @override
