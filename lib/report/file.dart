@@ -17,7 +17,7 @@ void write(Report report) async {
 
   // Write the file
   await file.writeAsString('${data}');
-  print(data);
+  // print(data);
 
   print("Saved to ${file.absolute.toString()}");
 
