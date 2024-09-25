@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bluetooth_detector/extensions/ordered_pairs.dart';
 import 'package:bluetooth_detector/map_view/build_marker_widget.dart';
 import 'package:bluetooth_detector/map_view/tile_servers.dart';
 import 'package:bluetooth_detector/report/device.dart';
@@ -83,12 +84,7 @@ class MapViewState extends State<MapView> {
               onPointerSignal: (event) {
                 if (event is PointerScrollEvent) {
                   transformer.setZoomInPlace(
-                      clamp(
-                          widget.controller!.zoom +
-                              event.scrollDelta.dy / -1000.0,
-                          2,
-                          18),
-                      event.localPosition);
+                      clamp(widget.controller!.zoom + event.scrollDelta.dy / -1000.0, 2, 18), event.localPosition);
                   setState(() {});
                 }
               },
@@ -115,8 +111,7 @@ class MapViewState extends State<MapView> {
                     },
                   ),
                   CustomPaint(
-                    painter: PolylinePainter(
-                        transformer, widget.device, widget.settings),
+                    painter: PolylinePainter(transformer, widget.device, widget.settings),
                   ),
                   ...markerWidgets,
                 ],
@@ -149,11 +144,8 @@ class PolylinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..strokeWidth = 4;
     device.paths(settings.thresholdTime.toInt()).forEach((Path path) {
-      for (int i = 0; i < path.length - 1; i++) {
-        Offset p1 = generateOffsetLatLng(path[i].location);
-        Offset p2 = generateOffsetLatLng(path[i + 1].location);
-        canvas.drawLine(p1, p2, paint);
-      }
+      path.forEachMappedOrderedPair(
+          (pc) => generateOffsetLatLng(pc.location), ((offsets) => canvas.drawLine(offsets.$1, offsets.$2, paint)));
     });
   }
 
