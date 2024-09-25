@@ -7,8 +7,6 @@ import 'package:bluetooth_detector/extensions/ordered_pairs.dart';
 import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:geolocator/geolocator.dart';
-
 part 'device.g.dart';
 
 /// Device data type
