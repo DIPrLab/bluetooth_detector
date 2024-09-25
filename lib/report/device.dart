@@ -79,20 +79,12 @@ class Device {
     return result;
   }
 
-  Duration timeTravelled(int thresholdTime) {
-    return this
-        .dataPoints
-        .map((datum) {
-          return datum.time;
-        })
-        .sorted()
-        .mapOrderedPairs((pair) {
-          return pair.$2.difference(pair.$1);
-        })
-        .fold(Duration(), (a, b) {
-          return b < Duration(seconds: thresholdTime) ? a + b : a;
-        });
-  }
+  Duration timeTravelled(int thresholdTime) => this
+      .dataPoints
+      .map((datum) => datum.time)
+      .sorted()
+      .mapOrderedPairs((pair) => pair.$2.difference(pair.$1))
+      .fold(Duration(), (a, b) => b < Duration(seconds: thresholdTime) ? a + b : a);
 
   List<Path> paths(int thresholdTime) {
     List<Path> paths = <Path>[];
@@ -121,11 +113,9 @@ class Device {
     return paths;
   }
 
-  double distanceTravelled(int thresholdTime) {
-    return paths(thresholdTime)
-        .map((path) => path
-            .mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location))
-            .fold(0.0, (a, b) => a + b))
-        .fold(0.0, (a, b) => a + b);
-  }
+  double distanceTravelled(int thresholdTime) => paths(thresholdTime)
+      .map((path) => path
+          .mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location))
+          .fold(0.0, (a, b) => a + b))
+      .fold(0.0, (a, b) => a + b);
 }
