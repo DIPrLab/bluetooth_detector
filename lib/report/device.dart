@@ -24,9 +24,8 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
 
-  Iterable<String> manufacturers() => manufacturer.map((e) =>
-      company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ??
-      "Unknown");
+  Iterable<String> manufacturers() =>
+      manufacturer.map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown");
 
   Set<LatLng> locations() {
     Set<LatLng> locations = {};
@@ -41,8 +40,7 @@ class Device {
 
   int incidence(int thresholdTime) {
     int result = 0;
-    List<Datum> dataPoints =
-        this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
+    List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
     while (dataPoints.length > 1) {
       DateTime a = dataPoints.elementAt(0).time;
       DateTime b = dataPoints.elementAt(1).time;
@@ -88,8 +86,7 @@ class Device {
           return datum.time;
         })
         .sorted()
-        .orderedPairs()
-        .map((pair) {
+        .mapOrderedPairs((pair) {
           return pair.$2.difference(pair.$1);
         })
         .fold(Duration(), (a, b) {
@@ -99,10 +96,7 @@ class Device {
 
   List<Path> paths(int thresholdTime) {
     List<Path> paths = <Path>[];
-    List<PathComponent> dataPoints = this
-        .dataPoints
-        .where((dataPoint) => dataPoint.location != null)
-        .map((datum) {
+    List<PathComponent> dataPoints = this.dataPoints.where((dataPoint) => dataPoint.location != null).map((datum) {
       LatLng location = datum.location!;
       return PathComponent(datum.time, location);
     }).sorted((a, b) => a.time.compareTo(b.time));
@@ -129,10 +123,8 @@ class Device {
 
   double distanceTravelled(int thresholdTime) {
     return paths(thresholdTime)
-        .map((path) => path
-            .orderedPairs()
-            .map((pair) => distanceBetween(pair.$1.location, pair.$2.location))
-            .reduce((a, b) => a + b))
+        .map((path) =>
+            path.mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location)).reduce((a, b) => a + b))
         .fold(0.0, (a, b) => a + b);
   }
 }
