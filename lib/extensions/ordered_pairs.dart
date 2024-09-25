@@ -16,5 +16,5 @@ extension OrderedPairs<T, E> on List<T> {
   void forEachOrderedPair(void Function((T, T)) action) => this.orderedPairs().forEach(action);
 
   void forEachMappedOrderedPair(E Function(T) toElement, void Function((E, E)) action) =>
-      this.map(toElement).toList().orderedPairs().forEach(action);
+      this.map(toElement).toList().forEachOrderedPair(action);
 }
