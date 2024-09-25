@@ -11,6 +11,10 @@ extension OrderedPairs<T, E> on List<T> {
 
   List<E> mapOrderedPairs(E Function((T, T)) toElement) => this.orderedPairs().map(toElement).toList();
 
+  List<(E, E)> orderedPairMap(E Function(T) toElement) => this.map(toElement).toList().orderedPairs();
+
+  void forEachOrderedPair(void Function((T, T)) action) => this.orderedPairs().forEach(action);
+
   void forEachMappedOrderedPair(E Function(T) toElement, void Function((E, E)) action) =>
       this.map(toElement).toList().orderedPairs().forEach(action);
 }
