@@ -27,16 +27,8 @@ class Device {
   Iterable<String> manufacturers() =>
       manufacturer.map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown");
 
-  Set<LatLng> locations() {
-    Set<LatLng> locations = {};
-    this.dataPoints.forEach((dataPoint) {
-      LatLng? location = dataPoint.location;
-      if (location != null) {
-        locations.add(location);
-      }
-    });
-    return locations;
-  }
+  Set<LatLng> locations() =>
+      this.dataPoints.where((dataPoint) => dataPoint.location != null).map((dataPoint) => dataPoint.location!).toSet();
 
   int incidence(int thresholdTime) {
     int result = 0;
