@@ -61,7 +61,11 @@ class Device {
       }
       for (Area area in result) {
         for (LatLng location in area) {
-          double distance = distanceBetween(curr, location);
+          double distance = Geolocator.distanceBetween(
+              curr.latitude.degrees,
+              curr.longitude.degrees,
+              location.latitude.degrees,
+              location.longitude.degrees);
           if (distance <= thresholdDistance) {
             area.add(curr);
             break;
@@ -81,19 +85,20 @@ class Device {
   }
 
   Duration timeTravelled(int thresholdTime) {
-    return this
-        .dataPoints
-        .map((datum) {
-          return datum.time;
-        })
-        .sorted()
-        .orderedPairs()
-        .map((pair) {
-          return pair.$2.difference(pair.$1);
-        })
-        .fold(Duration(), (a, b) {
-          return b < Duration(seconds: thresholdTime) ? a + b : a;
-        });
+    Duration result = Duration();
+    List<Datum> dataPoints =
+        this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
+
+    for (int i = 0; i < dataPoints.length - 1; i++) {
+      DateTime time1 = dataPoints[i].time;
+      DateTime time2 = dataPoints[i + 1].time;
+      Duration time = time2.difference(time1);
+      if (time < Duration(seconds: thresholdTime)) {
+        result += time;
+      }
+    }
+
+    return result;
   }
 
   List<Path> paths(int thresholdTime) {
@@ -128,12 +133,20 @@ class Device {
 
   double distanceTravelled(int thresholdTime) {
     double result = 0.0;
-    paths(thresholdTime)
-        .map((path) => path
-            .orderedPairs()
-            .map((pair) => distanceBetween(pair.$1.location, pair.$2.location))
-            .reduce((a, b) => a + b))
-        .fold(0.0, (a, b) => a + b);
+    paths(thresholdTime).map((path) {
+      double result = 0.0;
+      for (int i = 0; i < path.length - 1; i++) {
+        PathComponent pc1 = path[i];
+        PathComponent pc2 = path[i + 1];
+        double distance = Geolocator.distanceBetween(
+            pc1.location.latitude.degrees,
+            pc1.location.longitude.degrees,
+            pc2.location.latitude.degrees,
+            pc2.location.longitude.degrees);
+        result += distance;
+      }
+      return result;
+    }).reduce((a, b) => a + b);
     return result;
   }
 }
