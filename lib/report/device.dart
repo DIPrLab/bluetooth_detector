@@ -7,6 +7,8 @@ import 'package:bluetooth_detector/extensions/ordered_pairs.dart';
 import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:geolocator/geolocator.dart';
+
 part 'device.g.dart';
 
 /// Device data type
@@ -123,8 +125,9 @@ class Device {
 
   double distanceTravelled(int thresholdTime) {
     return paths(thresholdTime)
-        .map((path) =>
-            path.mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location)).reduce((a, b) => a + b))
+        .map((path) => path
+            .mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location))
+            .fold(0.0, (a, b) => a + b))
         .fold(0.0, (a, b) => a + b);
   }
 }
