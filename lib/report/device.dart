@@ -30,18 +30,16 @@ class Device {
   Set<LatLng> locations() =>
       this.dataPoints.where((dataPoint) => dataPoint.location != null).map((dataPoint) => dataPoint.location!).toSet();
 
-  int incidence(int thresholdTime) {
-    int result = 0;
-    List<Datum> dataPoints = this.dataPoints.sorted((a, b) => a.time.compareTo(b.time));
-    while (dataPoints.length > 1) {
-      DateTime a = dataPoints.elementAt(0).time;
-      DateTime b = dataPoints.elementAt(1).time;
-      Duration c = b.difference(a);
-      result += c > (Duration(seconds: thresholdTime) * 2) ? 1 : 0;
-      dataPoints.removeAt(0);
-    }
-    return result;
-  }
+  int incidence(int thresholdTime) =>
+      this
+          .dataPoints
+          .map((datum) => datum.time)
+          .sorted((a, b) => a.compareTo(b))
+          .orderedPairs()
+          .map((pair) => pair.$2.difference(pair.$1))
+          .where((duration) => duration > (Duration(seconds: thresholdTime)))
+          .length +
+      1;
 
   Set<Area> areas(double thresholdDistance) {
     Set<Area> result = {};
