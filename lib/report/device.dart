@@ -78,25 +78,24 @@ class Device {
 
   List<Path> paths(int thresholdTime) {
     List<Path> paths = <Path>[];
-    List<PathComponent> dataPoints = this.dataPoints.where((dataPoint) => dataPoint.location != null).map((datum) {
-      LatLng location = datum.location!;
-      return PathComponent(datum.time, location);
-    }).sorted((a, b) => a.time.compareTo(b.time));
+    List<PathComponent> dataPoints = this
+        .dataPoints
+        .where((dataPoint) => dataPoint.location != null)
+        .map((datum) => PathComponent(datum.time, datum.location!))
+        .sorted((a, b) => a.time.compareTo(b.time));
+
+    dataPoints.forEachOrderedPair((pair) {});
 
     while (!dataPoints.isEmpty) {
       PathComponent curr = dataPoints.first;
       dataPoints.removeAt(0);
-      if (paths.isEmpty) {
-        paths.add([curr]);
+      DateTime time1 = paths.isEmpty ? DateTime(1970) : paths.last.last.time;
+      DateTime time2 = curr.time;
+      Duration time = time2.difference(time1);
+      if (time < Duration(seconds: thresholdTime)) {
+        paths.last.add(curr);
       } else {
-        DateTime time1 = paths.last.last.time;
-        DateTime time2 = curr.time;
-        Duration time = time2.difference(time1);
-        if (time < Duration(seconds: thresholdTime)) {
-          paths.last.add(curr);
-        } else {
-          paths.add([curr]);
-        }
+        paths.add([curr]);
       }
     }
 
