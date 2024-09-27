@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part "slider.dart";
+part "section_header.dart";
 
 class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onAddLocation;
@@ -88,17 +89,7 @@ class SettingsViewState extends State<SettingsView> {
               onPressed: () => Navigator.pop(context),
               style: AppButtonStyle.buttonWithoutBackground,
             ),
-            Text(
-              "Metrics",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30.0),
-              child: Text(
-                "Time",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
+            header("Time"),
             settingsSlider(
                 "Scanning Time",
                 "${widget.settings.scanTime.toInt().toString()} seconds",
@@ -113,12 +104,7 @@ class SettingsViewState extends State<SettingsView> {
                 100.0,
                 widget.settings.thresholdTime,
                 ((newValue) => clampScanTime(newValue))),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: Text(
-                  "Distance",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                )),
+            header("Distance"),
             settingsSlider(
                 "Scanning Distance",
                 "${widget.settings.scanDistance.toInt().toString()} meters",
@@ -133,24 +119,10 @@ class SettingsViewState extends State<SettingsView> {
                 100.0,
                 widget.settings.thresholdDistance,
                 ((newValue) => clampScanDistance(newValue))),
-            Flexible(
-                child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: Text(
-                      "Safe Zones",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  LocationHeader(onAddLocation: _addLocation),
-                  ...widget.settings.safeZones.map(
-                    (location) => LatLngTile(location),
-                  ),
-                ]))),
+            header("Safe Zones"),
+            LocationHeader(onAddLocation: _addLocation),
+            ...widget.settings.safeZones
+                .map((location) => LatLngTile(location)),
           ],
         ),
       ),
