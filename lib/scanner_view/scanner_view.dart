@@ -53,6 +53,7 @@ class ScannerViewState extends State<ScannerView> {
       }
       widget.report.data[d.id]?.dataPoints.add(Datum(location));
     });
+    widget.report.refreshCache(widget.settings);
   }
 
   void enableLocationStream() {
