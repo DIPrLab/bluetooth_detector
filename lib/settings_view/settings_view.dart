@@ -7,6 +7,8 @@ import 'package:bluetooth_detector/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+part "slider.dart";
+
 class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onAddLocation;
 
