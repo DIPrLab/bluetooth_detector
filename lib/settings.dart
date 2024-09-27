@@ -2,6 +2,7 @@ import 'package:latlng/latlng.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings {
+  late double windowDuration;
   late double scanTime;
   late double thresholdTime;
   late double scanDistance;
@@ -10,6 +11,7 @@ class Settings {
 
   loadData() async {
     SharedPreferences.getInstance().then((prefs) {
+      windowDuration = prefs.getDouble("windowDuration") ?? 10;
       scanTime = prefs.getDouble("scanTime") ?? 10;
       thresholdTime = prefs.getDouble("thresholdTime") ?? 10;
       scanDistance = prefs.getDouble("scanDistance") ?? 10;

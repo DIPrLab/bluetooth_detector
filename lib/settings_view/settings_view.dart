@@ -62,9 +62,7 @@ class SettingsViewState extends State<SettingsView> {
           "safeZones",
           widget.settings.safeZones
               .map((z) =>
-                  z.latitude.degrees.toString() +
-                  "," +
-                  z.longitude.degrees.toString())
+                  "${z.latitude.degrees.toString()},${z.longitude.degrees.toString()}")
               .toList());
     });
     widget.settings.loadData();
@@ -89,18 +87,26 @@ class SettingsViewState extends State<SettingsView> {
               onPressed: () => Navigator.pop(context),
               style: AppButtonStyle.buttonWithoutBackground,
             ),
+            header("Windowing"),
+            settingsSlider(
+                "Window Duration",
+                "${widget.settings.windowDuration.toInt().toString()} minutes",
+                10.0,
+                100.0,
+                widget.settings.thresholdDistance,
+                ((newValue) => clampScanDistance(newValue))),
             header("Time"),
             settingsSlider(
                 "Scanning Time",
                 "${widget.settings.scanTime.toInt().toString()} seconds",
-                0.0,
+                1.0,
                 100.0,
                 widget.settings.scanTime,
                 ((newValue) => clampThresholdTime(newValue))),
             settingsSlider(
                 "Scanning Time Threshold",
                 "${widget.settings.thresholdTime.toInt().toString()} seconds",
-                0.0,
+                1.0,
                 100.0,
                 widget.settings.thresholdTime,
                 ((newValue) => clampScanTime(newValue))),
@@ -108,14 +114,14 @@ class SettingsViewState extends State<SettingsView> {
             settingsSlider(
                 "Scanning Distance",
                 "${widget.settings.scanDistance.toInt().toString()} meters",
-                0.0,
+                1.0,
                 100.0,
                 widget.settings.scanDistance,
                 ((newValue) => clampThresholdDistance(newValue))),
             settingsSlider(
                 "Scanning Distance Threshold",
                 "${widget.settings.thresholdDistance.toInt().toString()} meters",
-                0.0,
+                1.0,
                 100.0,
                 widget.settings.thresholdDistance,
                 ((newValue) => clampScanDistance(newValue))),

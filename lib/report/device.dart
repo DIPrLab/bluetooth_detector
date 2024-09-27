@@ -6,6 +6,7 @@ import 'package:bluetooth_detector/extensions/geolocator.dart';
 import 'package:bluetooth_detector/extensions/ordered_pairs.dart';
 import 'package:bluetooth_detector/assigned_numbers/company_identifiers.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:bluetooth_detector/settings.dart';
 
 part 'device.g.dart';
 
@@ -107,4 +108,10 @@ class Device {
           .mapOrderedPairs((pair) => distanceBetween(pair.$1.location, pair.$2.location))
           .fold(0.0, (a, b) => a + b))
       .fold(0.0, (a, b) => a + b);
+
+  void window(Settings settings) {
+    Duration duration = Duration(minutes: settings.windowDuration.toInt());
+    DateTime cutOff = DateTime.now().subtract(duration);
+    dataPoints = dataPoints.where((datum) => datum.time.isAfter(cutOff)).toSet();
+  }
 }
