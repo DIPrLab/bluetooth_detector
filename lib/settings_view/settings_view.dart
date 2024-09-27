@@ -20,14 +20,10 @@ class LocationHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
       child: ListTile(
         leading: IconButton(
-          icon: Icon(
-            Icons.add,
-          ),
+          icon: Icon(Icons.add),
           onPressed: onAddLocation,
         ),
-        title: Text(
-          "Add New Safe Zone",
-        ),
+        title: Text("Add New Safe Zone"),
       ),
     ));
   }
@@ -70,6 +66,7 @@ class SettingsViewState extends State<SettingsView> {
                   z.longitude.degrees.toString())
               .toList());
     });
+    widget.settings.loadData();
   }
 
   @override
@@ -102,102 +99,40 @@ class SettingsViewState extends State<SettingsView> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            Row(children: [
-              Text(
-                'Scanning Time',
-              ),
-              Spacer(),
-              Text(
-                widget.settings.scanTime.toInt().toString() + " seconds",
-              ),
-            ]),
-            Slider(
-              min: 0.0,
-              max: 100.0,
-              value: widget.settings.scanTime,
-              onChanged: (newValue) {
-                setState(() {
-                  widget.settings.scanTime = newValue;
-                  widget.settings.thresholdTime = max(
-                      widget.settings.scanTime, widget.settings.thresholdTime);
-                  save();
-                });
-              },
-            ),
-            Row(children: [
-              Text(
-                'Scanning Time threshold',
-              ),
-              Spacer(),
-              Text(
-                widget.settings.thresholdTime.toInt().toString() + " seconds",
-              ),
-            ]),
-            Slider(
-              min: 0.0,
-              max: 100.0,
-              value: widget.settings.thresholdTime,
-              onChanged: (newValue) {
-                setState(() {
-                  widget.settings.thresholdTime = newValue;
-                  widget.settings.scanTime =
-                      min(widget.settings.scanTime, newValue);
-                  save();
-                });
-              },
-            ),
+            settingsSlider(
+                "Scanning Time",
+                "${widget.settings.scanTime.toInt().toString()} seconds",
+                0.0,
+                100.0,
+                widget.settings.scanTime,
+                ((newValue) => clampThresholdTime(newValue))),
+            settingsSlider(
+                "Scanning Time Threshold",
+                "${widget.settings.thresholdTime.toInt().toString()} seconds",
+                0.0,
+                100.0,
+                widget.settings.thresholdTime,
+                ((newValue) => clampScanTime(newValue))),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30.0),
                 child: Text(
                   "Distance",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )),
-            Row(children: [
-              Text(
-                'Scanning Distance',
-              ),
-              Spacer(),
-              Text(
-                widget.settings.scanDistance.toInt().toString() + " meters",
-              ),
-            ]),
-            Slider(
-              min: 0.0,
-              max: 100.0,
-              value: widget.settings.scanDistance,
-              onChanged: (newValue) {
-                setState(() {
-                  widget.settings.scanDistance = newValue;
-                  widget.settings.thresholdDistance = max(
-                      widget.settings.scanDistance,
-                      widget.settings.thresholdDistance);
-                  save();
-                });
-              },
-            ),
-            Row(children: [
-              Text(
-                'Scanning Distance threshold',
-              ),
-              Spacer(),
-              Text(
-                widget.settings.thresholdDistance.toInt().toString() +
-                    " meters",
-              ),
-            ]),
-            Slider(
-              min: 0.0,
-              max: 100.0,
-              value: widget.settings.thresholdDistance,
-              onChanged: (newValue) {
-                setState(() {
-                  widget.settings.thresholdDistance = newValue;
-                  widget.settings.scanDistance =
-                      min(widget.settings.scanDistance, newValue);
-                  save();
-                });
-              },
-            ),
+            settingsSlider(
+                "Scanning Distance",
+                "${widget.settings.scanDistance.toInt().toString()} meters",
+                0.0,
+                100.0,
+                widget.settings.scanDistance,
+                ((newValue) => clampThresholdDistance(newValue))),
+            settingsSlider(
+                "Scanning Distance Threshold",
+                "${widget.settings.thresholdDistance.toInt().toString()} meters",
+                0.0,
+                100.0,
+                widget.settings.thresholdDistance,
+                ((newValue) => clampScanDistance(newValue))),
             Flexible(
                 child: SingleChildScrollView(
                     child: Column(
