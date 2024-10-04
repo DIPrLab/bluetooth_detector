@@ -3,9 +3,7 @@ import "dart:math";
 extension IterableStats on Iterable<num> {
   num average() => this.fold(0.0, (a, b) => a + b) / this.length;
 
-  double stdDev() => sqrt(this.fold(0.0, (a, b) => a + pow(b - average(), 2)) / this.length);
-
-  double zScore(num x) => stdDev() == 0 ? 0 : (x - average()) / stdDev();
+  double standardDeviation() => sqrt(this.fold(0.0, (a, b) => a + pow(b - average(), 2)) / this.length);
 }
 
 extension ListStats on List<num> {

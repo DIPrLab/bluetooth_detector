@@ -7,14 +7,11 @@ extension Statistics on Report {
       (device.incidence(settings.thresholdTime.toInt()), incidenceStats),
       (device.areas(settings.thresholdDistance).length, areaStats),
       (device.distanceTravelled(settings.thresholdTime.toInt()), distanceTravelledStats),
-    ].map((metric) => max(0, zScore(metric.$1, metric.$2)));
+    ].map((metric) => max(0, metric.$2.zScore(metric.$1)));
     num avgResult = Stats.fromData(data).average;
     // num addResult = data.reduce((a, b) => a + b);
     return avgResult;
   }
-
-  static double zScore(num x, Stats stats) =>
-      stats.standardDeviation == 0 ? 0 : (x - stats.average) / stats.standardDeviation;
 
   Stats _areaStats(Iterable<Device> devices, Settings settings) =>
       Stats.fromData(devices.map((device) => device.areas(settings.thresholdDistance).length));
