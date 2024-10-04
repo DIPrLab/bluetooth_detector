@@ -28,11 +28,8 @@ class ReportViewState extends State<ReportView> {
     devices = widget.report
         .devices()
         .where((device) => widget.report.riskScore(device!, widget.settings) > 0)
-        .sorted((a, b) {
-          num deviceAValue = widget.report.riskScore(a!, widget.settings);
-          num deviceBValue = widget.report.riskScore(b!, widget.settings);
-          return deviceAValue.compareTo(deviceBValue);
-        })
+        .sorted((a, b) =>
+            widget.report.riskScore(a!, widget.settings).compareTo(widget.report.riskScore(b!, widget.settings)))
         .reversed
         .toList();
   }
