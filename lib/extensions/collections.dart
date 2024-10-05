@@ -22,17 +22,22 @@ extension ListStats on List<num> {
 
   num iqr() => q3() - q1();
 
+  (num, num) iqrLimits() => (q1() - (iqr() * 1.5), q3() + (iqr() * 1.5));
+
   (Iterable<num>, Iterable<num>) iqrOutliers() {
-    Iterable<num> lowOutliers = this.where((element) => element < (q1() - (iqr() * 1.5)));
-    Iterable<num> highOutliers = this.where((element) => element > (q3() * (iqr() * 1.5)));
+    Iterable<num> lowOutliers = this.where((element) => element < iqrLimits().$1);
+    Iterable<num> highOutliers = this.where((element) => element > iqrLimits().$2);
     return (lowOutliers, highOutliers);
   }
 
+  (num, num, num, num) tukeyLimits() =>
+      (q1() - (iqr() * 3), q1() - (iqr() * 1.5), q3() + (iqr() * 1.5), q3() + (iqr() * 3));
+
   (Iterable<num>, Iterable<num>, Iterable<num>, Iterable<num>) tukeyOutliers() {
-    Iterable<num> extremeLowOutliers = this.where((element) => element < (q1() - (iqr() * 3)));
-    Iterable<num> mildLowOutliers = this.where((element) => element < (q1() - (iqr() * 1.5)));
-    Iterable<num> mildHighOutliers = this.where((element) => element > (q3() + (iqr() * 1.5)));
-    Iterable<num> extremeHighOutliers = this.where((element) => element > (q3() + (iqr() * 3)));
+    Iterable<num> extremeLowOutliers = this.where((element) => element < tukeyLimits().$1);
+    Iterable<num> mildLowOutliers = this.where((element) => element < tukeyLimits().$2);
+    Iterable<num> mildHighOutliers = this.where((element) => element > tukeyLimits().$3);
+    Iterable<num> extremeHighOutliers = this.where((element) => element > tukeyLimits().$4);
     return (extremeLowOutliers, mildLowOutliers, mildHighOutliers, extremeHighOutliers);
   }
 }

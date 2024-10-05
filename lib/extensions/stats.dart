@@ -8,6 +8,12 @@ class Stats {
   late num standardDeviation = input.standardDeviation();
   late num mad = input.mad();
   late num iqr = input.iqr();
+  late num iqrLowerLimit = input.iqrLimits().$1;
+  late num iqrUpperLimit = input.iqrLimits().$2;
+  late num tukeyMildLowerLimit = iqrLowerLimit;
+  late num tukeyMildUpperLimit = iqrUpperLimit;
+  late num tukeyExtremeLowerLimit = input.tukeyLimits().$1;
+  late num tukeyExtremeUpperLimit = input.tukeyLimits().$4;
 
   late Iterable<num> lowOutliers = input.iqrOutliers().$1;
   late Iterable<num> highOutliers = input.iqrOutliers().$2;
