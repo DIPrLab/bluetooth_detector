@@ -12,7 +12,8 @@ extension ListStats on List<num> {
       ? this.getRange((this.length ~/ 2) - 1, (this.length ~/ 2) + 1).average()
       : this[this.length ~/ 2];
 
-  num mad() => this.map((x) => x - this.average().abs()).average();
+  // num mad() => this.map((x) => x - this.average().abs()).average();
+  num mad() => this.map((x) => (x - this.median()).abs()).toList().median();
 
   (List<num>, List<num>) split() =>
       (this.getRange(0, this.length ~/ 2).toList(), this.getRange((this.length / 2).ceil(), this.length).toList());
