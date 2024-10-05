@@ -9,8 +9,8 @@ extension IterableStats on Iterable<num> {
 
 extension ListStats on List<num> {
   num median() => this.length.isEven
-      ? this.getRange((this.length ~/ 2) - 1, (this.length ~/ 2) + 1).average()
-      : this[this.length ~/ 2];
+      ? (this..sort((a, b) => a.compareTo(b))).getRange((this.length ~/ 2) - 1, (this.length ~/ 2) + 1).average()
+      : (this..sort((a, b) => a.compareTo(b)))[this.length ~/ 2];
 
   // num mad() => this.map((x) => x - this.average().abs()).average();
   num mad() => this.map((x) => (x - this.median()).abs()).toList().median();
