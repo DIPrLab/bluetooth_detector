@@ -6,6 +6,7 @@ class Stats {
   late num average = input.average();
   late num median = input.median();
   late num standardDeviation = input.standardDeviation();
+  late num mad = input.mad();
   late num iqr = input.iqr();
 
   late Iterable<num> lowOutliers = input.iqrOutliers().$1;

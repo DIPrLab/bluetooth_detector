@@ -1,4 +1,5 @@
 import "dart:math";
+import "dart:core";
 
 extension IterableStats on Iterable<num> {
   num average() => this.fold(0.0, (a, b) => a + b) / this.length;
@@ -10,6 +11,8 @@ extension ListStats on List<num> {
   num median() => this.length.isEven
       ? this.getRange((this.length ~/ 2) - 1, (this.length ~/ 2) + 1).average()
       : this[this.length ~/ 2];
+
+  num mad() => this.map((x) => x - this.average().abs()).average();
 
   (List<num>, List<num>) split() =>
       (this.getRange(0, this.length ~/ 2).toList(), this.getRange((this.length / 2).ceil(), this.length).toList());
