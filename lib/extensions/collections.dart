@@ -3,7 +3,7 @@ import "dart:math";
 extension IterableStats on Iterable<num> {
   num average() => this.fold(0.0, (a, b) => a + b) / this.length;
 
-  double standardDeviation() => sqrt(this.fold(0.0, (a, b) => a + pow(b - average(), 2)) / this.length);
+  num standardDeviation() => sqrt(this.fold(0.0, (a, b) => a + pow(b - average(), 2)) / this.length);
 }
 
 extension ListStats on List<num> {

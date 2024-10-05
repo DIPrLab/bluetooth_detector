@@ -15,7 +15,7 @@ class Stats {
   late Iterable<num> mildHighOutliers = input.tukeyOutliers().$3;
   late Iterable<num> extremeHighOutliers = input.tukeyOutliers().$4;
 
-  double zScore(num x) => standardDeviation == 0 ? 0 : (x - average) / standardDeviation;
+  num zScore(num x) => standardDeviation == 0 ? 0 : (x - average) / standardDeviation;
 
   factory Stats.fromData(Iterable<num> input) => Stats(input.toList()..sort());
   Stats(this.input);
