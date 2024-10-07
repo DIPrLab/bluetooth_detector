@@ -4,14 +4,21 @@ extension Scanner on ScannerViewState {
   void dispose() {
     scanResultsSubscription.cancel();
     isScanningSubscription.cancel();
+    disableLocationStream();
   }
 
   // android is slow when asking for all advertisements,
   // so instead we only ask for 1/8 of them
-  Future startScan() async => await FlutterBluePlus.startScan(
-      continuousUpdates: true, removeIfGone: Duration(seconds: 1), continuousDivisor: Platform.isAndroid ? 8 : 1);
+  Future startScan() async {
+    widget.settings.locationEnabled ? enableLocationStream() : disableLocationStream();
+    await FlutterBluePlus.startScan(
+        continuousUpdates: true, removeIfGone: Duration(seconds: 1), continuousDivisor: Platform.isAndroid ? 8 : 1);
+  }
 
-  Future stopScan() async => FlutterBluePlus.stopScan();
+  Future stopScan() async {
+    FlutterBluePlus.stopScan();
+    widget.settings.locationEnabled ? enableLocationStream() : disableLocationStream();
+  }
 
   void rescan() => setState(() {
         stopScan();

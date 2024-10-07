@@ -66,6 +66,7 @@ class ScannerViewState extends State<ScannerView> {
   }
 
   void disableLocationStream() {
+    location = null;
     positionStream.pause();
     positionStream.cancel();
   }
@@ -74,7 +75,7 @@ class ScannerViewState extends State<ScannerView> {
   void initState() {
     super.initState();
 
-    enableLocationStream();
+    widget.settings.locationEnabled ? enableLocationStream() : disableLocationStream();
 
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen((results) {
       devices = results
