@@ -44,7 +44,7 @@ class PropertyTable extends StatelessWidget {
       showBottomBorder: false,
       columns: const [
         DataColumn(label: Text("")),
-        DataColumn(label: Text(""), numeric: true),
+        DataColumn(label: Text("")),
       ],
       rows: rows,
     );
