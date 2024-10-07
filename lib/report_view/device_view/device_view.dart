@@ -1,6 +1,5 @@
 import 'package:bluetooth_detector/report_view/device_view/device_detail_view/device_detail_view.dart';
 import 'package:bluetooth_detector/report/report.dart';
-import 'package:bluetooth_detector/report_view/device_map_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/settings.dart';
@@ -36,37 +35,19 @@ class DeviceView extends StatelessWidget {
               color: colors.foreground,
             ),
             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-            child: Row(children: [
-              Icon(Icons.circle, color: colors.altText),
-              Text("Risk Score" + report.riskScore(device, settings).toString()),
-              Spacer(),
-              Column(children: [
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SafeArea(child: DeviceDetailView(device, report, settings))));
-                  },
-                  icon: Icon(Icons.info_outline),
-                  label: Text("Details"),
+            child: ListTile(
+                leading: CircleAvatar(backgroundColor: colors.altText, foregroundColor: colors.altText),
+                title: Expanded(
+                  child: Text(device.deviceLabel() == device.id ? "" : device.deviceLabel(),
+                      maxLines: 2, overflow: TextOverflow.ellipsis),
                 ),
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SafeArea(
-                                    child: DeviceMapView(
-                                  this.settings,
-                                  device: device,
-                                  report: report,
-                                ))));
-                  },
-                  icon: Icon(Icons.map),
-                  label: Text("Device Routes"),
+                subtitle: Expanded(
+                  child: Text(device.id, maxLines: 2, overflow: TextOverflow.ellipsis),
                 ),
-              ]),
-            ])));
+                trailing: Icon(Icons.keyboard_arrow_right),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SafeArea(child: DeviceDetailView(device, report, settings)))))));
   }
 }
