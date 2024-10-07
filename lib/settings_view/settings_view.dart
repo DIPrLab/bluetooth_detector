@@ -5,7 +5,6 @@ import 'package:bluetooth_detector/styles/styles.dart';
 import 'package:bluetooth_detector/settings_view/LatLngTile.dart';
 import 'package:bluetooth_detector/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part "slider.dart";
 part "section_header.dart";
@@ -47,7 +46,7 @@ class SettingsViewState extends State<SettingsView> {
     getLocation().then((location) {
       setState(() {
         widget.settings.safeZones.add(location);
-        save();
+        widget.settings.save();
       });
     });
   }
@@ -127,8 +126,7 @@ class SettingsViewState extends State<SettingsView> {
                 ((newValue) => clampScanDistance(newValue))),
             header("Safe Zones"),
             LocationHeader(onAddLocation: _addLocation),
-            ...widget.settings.safeZones
-                .map((location) => LatLngTile(location)),
+            ...widget.settings.safeZones.map((location) => LatLngTile(location)),
           ],
         ),
       ),

@@ -23,4 +23,14 @@ class Settings {
           [];
     });
   }
+
+  void save() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setDouble("scanTime", scanTime);
+      prefs.setDouble("thresholdTime", thresholdTime);
+      prefs.setDouble("scanDistance", scanTime);
+      prefs.setDouble("thresholdDistance", thresholdTime);
+      prefs.setStringList("safeZones",
+          safeZones.map((z) => "${z.latitude.degrees.toString()},${z.longitude.degrees.toString()}").toList());
+    });
 }
