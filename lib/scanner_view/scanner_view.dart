@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bluetooth_detector/map_view/map_functions.dart';
 import 'package:bluetooth_detector/map_view/map_view.dart';
 import 'package:bluetooth_detector/map_view/position.dart';
 import 'package:bluetooth_detector/report/file.dart';
@@ -59,9 +58,7 @@ class ScannerViewState extends State<ScannerView> {
   void enableLocationStream() {
     positionStream = Geolocator.getPositionStream(locationSettings: Controllers.getLocationSettings(30))
         .listen((Position? position) {
-      setState(() {
-        location = position?.toLatLng();
-      });
+      setState(() => location = position?.toLatLng());
       if (isScanning) {
         log();
         rescan();
@@ -85,9 +82,7 @@ class ScannerViewState extends State<ScannerView> {
           .map((ScanResult e) => Device(e.device.remoteId.toString(), e.advertisementData.advName,
               e.device.platformName, e.advertisementData.manufacturerData.keys.toList()))
           .toList();
-      results.forEach((result) {
-        probe(result.device);
-      });
+      results.forEach((result) => probe(result.device));
       if (mounted) {
         setState(() {});
       }
@@ -102,9 +97,7 @@ class ScannerViewState extends State<ScannerView> {
       }
     });
 
-    _timeStream = Stream.periodic(Duration(seconds: widget.settings.scanTime.toInt()), (int x) {
-      return DateTime.now();
-    });
+    _timeStream = Stream.periodic(Duration(seconds: widget.settings.scanTime.toInt()), (int x) => DateTime.now());
 
     timeStreamSubscription = _timeStream.listen((currentTime) {
       if (isScanning) {
