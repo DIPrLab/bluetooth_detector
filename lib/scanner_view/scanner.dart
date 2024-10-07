@@ -6,26 +6,20 @@ extension Scanner on ScannerViewState {
     isScanningSubscription.cancel();
   }
 
-  Future startScan() async {
-    // android is slow when asking for all advertisements,
-    // so instead we only ask for 1/8 of them
-    await FlutterBluePlus.startScan(
-        continuousUpdates: true, removeIfGone: Duration(seconds: 1), continuousDivisor: Platform.isAndroid ? 8 : 1);
-  }
+  // android is slow when asking for all advertisements,
+  // so instead we only ask for 1/8 of them
+  Future startScan() async => await FlutterBluePlus.startScan(
+      continuousUpdates: true, removeIfGone: Duration(seconds: 1), continuousDivisor: Platform.isAndroid ? 8 : 1);
 
-  Future stopScan() async {
-    FlutterBluePlus.stopScan();
-  }
+  Future stopScan() async => FlutterBluePlus.stopScan();
 
-  void rescan() {
-    setState(() {
-      stopScan();
-      startScan();
-    });
-  }
+  void rescan() => setState(() {
+        stopScan();
+        startScan();
+      });
 
   void probe(BluetoothDevice device) async {
-    if (autoConnect) {
+    if (widget.settings.autoConnect) {
       await device.connect(autoConnect: device.isAutoConnectEnabled);
       await device.discoverServices();
     }
