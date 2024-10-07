@@ -118,18 +118,14 @@ class ScannerViewState extends State<ScannerView> {
             Row(children: [
               Padding(
                 padding: EdgeInsets.all(16.0),
-                child: autoConnectButton(),
+                child: settingsButton(),
               ),
               Padding(
                 padding: EdgeInsets.all(16.0),
-                child: locationButton(),
+                child: reportViewerButton(),
               ),
             ]),
             Row(children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: settingsButton(),
-              ),
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: scanButton(),
