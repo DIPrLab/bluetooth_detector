@@ -1,4 +1,5 @@
 import 'package:bluetooth_detector/report_view/device_view/device_detail_view/property_table_view.dart';
+import 'package:bluetooth_detector/report_view/device_map_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_detector/report/device.dart';
 import 'package:bluetooth_detector/styles/styles.dart';
@@ -30,9 +31,20 @@ class DeviceDetailView extends StatelessWidget {
                     Row(children: [Spacer(), Text("Device Details", style: TextStyles.title), Spacer()]),
                   ]),
                   PropertyTable(device, report, settings),
-                  TextButton(
-                    onPressed: () {},
-                    child: Spacer(),
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SafeArea(
+                                      child: DeviceMapView(
+                                    this.settings,
+                                    device: device,
+                                    report: report,
+                                  ))));
+                    },
+                    icon: Icon(Icons.map),
+                    label: Text("Device Routes"),
                   ),
                 ]))));
   }
