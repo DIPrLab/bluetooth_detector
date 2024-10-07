@@ -27,26 +27,16 @@ class PropertyTable extends StatelessWidget {
     rows.add(Row("Duration", device.timeTravelled(settings.scanTime.toInt()).printFriendly()));
   }
 
-  DataRow Row(String label, String value) {
-    return DataRow(
-      cells: [
+  DataRow Row(String label, String value) => DataRow(cells: [
         DataCell(Text(label, softWrap: true)),
-        DataCell(Text(value, softWrap: true, textAlign: TextAlign.right)),
-      ],
-    );
-  }
+        DataCell(Text(value, softWrap: true, textAlign: TextAlign.right))
+      ]);
 
   @override
-  Widget build(context) {
-    return DataTable(
+  Widget build(context) => DataTable(
       sortAscending: true,
       sortColumnIndex: 1,
       showBottomBorder: false,
-      columns: const [
-        DataColumn(label: Text("")),
-        DataColumn(label: Text("")),
-      ],
-      rows: rows,
-    );
-  }
+      columns: const [DataColumn(label: Text("")), DataColumn(label: Text(""))],
+      rows: rows);
 }
