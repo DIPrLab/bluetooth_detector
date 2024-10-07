@@ -51,22 +51,6 @@ class SettingsViewState extends State<SettingsView> {
     });
   }
 
-  void save() {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setDouble("scanTime", widget.settings.scanTime);
-      prefs.setDouble("thresholdTime", widget.settings.thresholdTime);
-      prefs.setDouble("scanDistance", widget.settings.scanTime);
-      prefs.setDouble("thresholdDistance", widget.settings.thresholdTime);
-      prefs.setStringList(
-          "safeZones",
-          widget.settings.safeZones
-              .map((z) =>
-                  "${z.latitude.degrees.toString()},${z.longitude.degrees.toString()}")
-              .toList());
-    });
-    widget.settings.loadData();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -86,37 +70,32 @@ class SettingsViewState extends State<SettingsView> {
               onPressed: () => Navigator.pop(context),
               style: AppButtonStyle.buttonWithoutBackground,
             ),
+            header("Discover Services"),
+            SwitchListTile(
+              title: Text("AutoConnect ${widget.settings.autoConnect ? "On" : "Off"}"),
+              value: widget.settings.autoConnect,
+              onChanged: (bool value) => setState(() => widget.settings.autoConnect = value),
+              secondary: widget.settings.autoConnect ? Icon(Icons.bluetooth) : Icon(Icons.bluetooth_disabled),
+            ),
+            header("Location Services"),
+            SwitchListTile(
+              title: Text("Location ${widget.settings.locationEnabled ? "En" : "Dis"}abled"),
+              value: widget.settings.locationEnabled,
+              onChanged: (bool value) => setState(() => widget.settings.locationEnabled = value),
+              secondary:
+                  widget.settings.locationEnabled ? Icon(Icons.location_searching) : Icon(Icons.location_disabled),
+            ),
             header("Windowing"),
-            settingsSlider(
-                "Window Duration",
-                "${widget.settings.windowDuration.toInt().toString()} minutes",
-                10.0,
-                100.0,
-                widget.settings.thresholdDistance,
-                ((newValue) => clampScanDistance(newValue))),
+            settingsSlider("Window Duration", "${widget.settings.windowDuration.toInt().toString()} minutes", 10.0,
+                100.0, widget.settings.thresholdDistance, ((newValue) => clampScanDistance(newValue))),
             header("Time"),
-            settingsSlider(
-                "Scanning Time",
-                "${widget.settings.scanTime.toInt().toString()} seconds",
-                1.0,
-                100.0,
-                widget.settings.scanTime,
-                ((newValue) => clampThresholdTime(newValue))),
-            settingsSlider(
-                "Scanning Time Threshold",
-                "${widget.settings.thresholdTime.toInt().toString()} seconds",
-                1.0,
-                100.0,
-                widget.settings.thresholdTime,
-                ((newValue) => clampScanTime(newValue))),
+            settingsSlider("Scanning Time", "${widget.settings.scanTime.toInt().toString()} seconds", 1.0, 100.0,
+                widget.settings.scanTime, ((newValue) => clampThresholdTime(newValue))),
+            settingsSlider("Scanning Time Threshold", "${widget.settings.thresholdTime.toInt().toString()} seconds",
+                1.0, 100.0, widget.settings.thresholdTime, ((newValue) => clampScanTime(newValue))),
             header("Distance"),
-            settingsSlider(
-                "Scanning Distance",
-                "${widget.settings.scanDistance.toInt().toString()} meters",
-                1.0,
-                100.0,
-                widget.settings.scanDistance,
-                ((newValue) => clampThresholdDistance(newValue))),
+            settingsSlider("Scanning Distance", "${widget.settings.scanDistance.toInt().toString()} meters", 1.0, 100.0,
+                widget.settings.scanDistance, ((newValue) => clampThresholdDistance(newValue))),
             settingsSlider(
                 "Scanning Distance Threshold",
                 "${widget.settings.thresholdDistance.toInt().toString()} meters",
