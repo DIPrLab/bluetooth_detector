@@ -35,9 +35,6 @@ extension Buttons on ScannerViewState {
 
   Widget settingsButton() {
     return FloatingActionButton.large(
-      onPressed: () {
-        Navigator.push(
-            context,
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => SafeArea(child: SettingsView(widget.settings)))),
         child: const Icon(Icons.settings));
