@@ -25,6 +25,18 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
 
+  String deviceLabel() {
+    String result = this.id;
+    if (!this.name.isEmpty) {
+      result = this.name;
+    } else if (!this.platformName.isEmpty) {
+      result = this.platformName;
+    } else if (!this.manufacturer.isEmpty) {
+      result = this.manufacturers().join(", ").toString();
+    }
+    return result;
+  }
+
   Iterable<String> manufacturers() =>
       manufacturer.map((e) => company_identifiers[e.toRadixString(16).toUpperCase().padLeft(4, "0")] ?? "Unknown");
 
