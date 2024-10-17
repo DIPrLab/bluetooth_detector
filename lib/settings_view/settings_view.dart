@@ -87,7 +87,7 @@ class SettingsViewState extends State<SettingsView> {
             ),
             header("Windowing"),
             settingsSlider("Window Duration", "${widget.settings.windowDuration.toInt().toString()} minutes", 10.0,
-                100.0, widget.settings.thresholdDistance, ((newValue) => clampScanDistance(newValue))),
+                100.0, widget.settings.thresholdDistance, ((x) => ())),
             header("Time"),
             settingsSlider("Scanning Time", "${widget.settings.scanTime.toInt().toString()} seconds", 1.0, 100.0,
                 widget.settings.scanTime, ((newValue) => clampThresholdTime(newValue))),
