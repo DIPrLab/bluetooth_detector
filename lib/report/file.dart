@@ -36,7 +36,11 @@ Future<Report> readReport() async {
   }
 }
 
-Future<Settings> readSettings() async => Settings().loadData();
+Future<Settings> readSettings() async {
+  Settings settings = Settings();
+  settings.loadData();
+  return settings;
+}
 
 void printSuccess(String text) => print('\x1B[32m$text\x1B[0m');
 

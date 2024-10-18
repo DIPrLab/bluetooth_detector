@@ -11,7 +11,7 @@ class Settings {
   late double thresholdDistance;
   late List<LatLng> safeZones;
 
-  loadData() async => SharedPreferences.getInstance().then((prefs) {
+  void loadData() async => SharedPreferences.getInstance().then((prefs) {
         autoConnect = prefs.getBool("autoConnect") ?? false;
         locationEnabled = prefs.getBool("locationEnabled") ?? true;
         windowDuration = prefs.getDouble("windowDuration") ?? 10;
